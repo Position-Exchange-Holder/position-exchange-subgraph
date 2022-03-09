@@ -1,0 +1,94 @@
+enum Action {
+  Purchase
+  Transfer
+  Trade
+  Stake
+  Unstake
+  Burn
+}
+
+type BondInfo @entity {
+  """
+  Only have one record with id default to 1
+  """
+  id: ID!
+
+  """
+  Metadata
+  """
+  name: String!
+  symbol: String!
+  underlyingAsset: Bytes!
+  collateralAmount: BigInt!
+  faceAsset: Bytes!
+  faceValue: BigInt!
+  maxSupply: BigInt! # totalSupply in the event
+  
+  issuePrice: BigInt! # Set when event IssuePriceInitialized is emitted
+
+  """
+  Bond milestones
+  """
+  onSale: BigInt!
+  active: BigInt!
+  maturity: BigInt!
+
+  """
+  Bond statistics
+  """
+  totalSupply: BigInt!
+  totalStakedBalance: BigInt!
+  totalBurned: BigInt!
+  totalFaceAsset: BigInt!
+  totalBondholders: BigInt!
+  totalTransactions: BigInt!
+  
+  """
+  More information
+  """
+  issuer: Bytes! # Address of issuer
+  txHash: Bytes!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Bondholder @entity {
+  """
+  Address of Bondholder
+  """
+  id: ID!
+
+  balance: BigInt!
+  stakedBalance: BigInt!
+
+  transactions: [Transaction!]! @derivedFrom(field: "sender")
+  fromTransactions: [Transaction!]! @derivedFrom(field: "from")
+  toTransactions: [Transaction!]! @derivedFrom(field: "to")
+  totalTransactions: BigInt!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Transaction @entity {
+  """
+  Transaction hash
+  """
+  id: ID!
+  
+  action: Action!
+
+  amount: BigInt! # Amount bond
+
+  sender: Bondholder!
+  from: Bondholder!
+  to: Bondholder!
+
+  gasUsed: BigInt!
+  gasPrice: BigInt!
+  
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}

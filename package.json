@@ -1,0 +1,16 @@
+{
+  "name": "position-exchange-subgraph",
+  "description": "Position Exchange Subgraphs",
+  "author": "Community",
+  "keywords": ["position", "exchange", "subgraph"],
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "deploy:bond01": "cd subgraphs/bond/bond01/ && npm run subgraph:deploy"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-ts": "^0.25.0",
+    "env-cmd": "^10.1.0",
+    "mustache": "^4.2.0"
+  }
+}

@@ -1,0 +1,8 @@
+node_modules
+subgraph.yaml
+build
+generated
+.idea
+.env
+.list
+.DS_Store
