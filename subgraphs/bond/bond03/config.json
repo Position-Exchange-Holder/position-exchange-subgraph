@@ -1,0 +1,8 @@
+{
+  "network": "bsc",
+  "description": "Position Exchange Bond03 Subgraph",
+  "repository": "https://github.com/Position-Exchange-Holder/position-exchange-subgraph",
+  "apiVersion": "0.0.5",
+  "PositionBond03Address": "0xD3462c5C15F90D41eb920888F9080ac64488d16b",
+  "PositionBond03StartBlock": 15339709
+}
