@@ -6,7 +6,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "deploy:bond01": "cd subgraphs/bond/bond01/ && npm run subgraph:deploy"
+    "deploy:bond01": "cd subgraphs/bond/bond01/ && npm run subgraph:deploy",
+    "deploy:bond02": "cd subgraphs/bond/bond02/ && npm run subgraph:deploy"
   },
   "dependencies": {
     "@graphprotocol/graph-ts": "^0.25.0",

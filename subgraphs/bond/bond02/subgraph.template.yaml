@@ -1,0 +1,36 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{{repository}}}
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PositionBond02
+    network: {{network}}
+    source:
+      address: '{{PositionBond02Address}}'
+      startBlock: {{PositionBond02StartBlock}}
+      abi: PositionBond02
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyScript
+      entities:
+        - BondInfo
+        - Bondholder
+        - Transaction
+      abis:
+        - name: PositionBond02
+          file: ./abis/PositionBond02.json
+      eventHandlers:
+        - event: BondCreated(string,string,address,uint256,address,uint256,uint256)
+          handler: handleBondCreated
+        - event: IssuePriceInitialized(uint256)
+          handler: handleIssuePriceInitialized
+        - event: BondActivated(uint64,uint64,uint64)
+          handler: handleBondActivated
+        - event: Purchased(address,uint256,uint256)
+          handler: handlePurchased
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mappings/bond02.ts
