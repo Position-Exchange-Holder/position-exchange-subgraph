@@ -9,3 +9,5 @@
 6. Position Token
 7. Vault
 8. Yeild Farming
+9. Referral
+10. Private Sale - Angel Investor
