@@ -1,0 +1,6 @@
+{
+  "network": "bsc",
+  "description": "",
+  "repository": "https://github.com/Position-Exchange-Holder/position-exchange-subgraph",
+  "apiVersion": "0.0.5"
+}
