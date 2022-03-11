@@ -6,11 +6,12 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "subgraph:generate:folder": ". ./generate-new-subgraph-folder.sh",
+    "subgraph:generate:folder": ". ./generate-subgraph-folder.sh",
     "deploy:bond:1": "cd subgraphs/bond/bond01/ && npm run subgraph:deploy",
     "deploy:bond:2": "cd subgraphs/bond/bond02/ && npm run subgraph:deploy",
     "deploy:bond:3": "cd subgraphs/bond/bond03/ && npm run subgraph:deploy",
-    "deploy:nft": "cd subgraphs/position-nft/ && npm run subgraph:deploy"
+    "deploy:nft": "cd subgraphs/position-nft/ && npm run subgraph:deploy",
+    "deploy:referral": "cd subgraphs/referral/ && npm run subgraph:deploy"
   },
   "dependencies": {
     "@graphprotocol/graph-ts": "^0.25.0",

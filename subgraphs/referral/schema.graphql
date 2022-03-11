@@ -1,0 +1,37 @@
+interface UserInterface {
+  id: ID!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type Operator implements UserInterface @entity {
+  id: ID!
+  status: Boolean!
+  txHash: Bytes!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type Referrer implements UserInterface @entity {
+  id: ID!
+  recordsRef: [UserReferralRecord!]! @derivedFrom(field: "referrer")
+  totalReferrals: BigInt!
+  totalReferralCommissions: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type UserReferralRecord implements UserInterface @entity {
+  """
+  ID = "ReferrerAddress:UserAdress"
+  """
+  id: ID!
+  user: Bytes! # Address
+  referrer: Referrer!
+  refTxHash: Bytes!
+  totalCommissionsEarnedForReferrer: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}

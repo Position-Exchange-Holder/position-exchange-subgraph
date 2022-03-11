@@ -1,0 +1,8 @@
+{
+  "network": "bsc",
+  "description": "Position Exchange Referral Subgraph",
+  "repository": "https://github.com/Position-Exchange-Holder/position-exchange-subgraph",
+  "apiVersion": "0.0.5",
+  "PositionReferralAddress": "0xfe2d545d214d51e8028947cfd15c9439d3de3a33",
+  "PositionReferralStartBlock": 10302534
+}

@@ -1,0 +1,33 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{{repository}}}
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PositionReferral
+    network: {{network}}
+    source:
+      address: '{{PositionReferralAddress}}'
+      startBlock: {{PositionReferralStartBlock}}
+      abi: PositionReferral
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - Operator
+        - Referrer
+        - UserReferralRecord
+      abis:
+        - name: PositionReferral
+          file: ./abis/PositionReferral.json
+      eventHandlers:
+        - event: ReferralRecorded(indexed address,indexed address)
+          handler: handleReferralRecorded
+        - event: ReferralCommissionRecorded(indexed address,uint256)
+          handler: handleReferralCommissionRecorded
+        - event: OperatorUpdated(indexed address,indexed bool)
+          handler: handleOperatorUpdated
+      file: ./src/mappings/referral.ts
+  
