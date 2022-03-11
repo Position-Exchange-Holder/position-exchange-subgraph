@@ -1,0 +1,142 @@
+enum Action {
+  Mint
+  Burn
+  Transfer
+  TradeOnMarketplace
+  Stake
+  Unstake
+}
+
+type PositionNFT @entity {
+  id: ID!
+
+  """
+  NFT Attributes (Factory)
+  """
+  grade: BigInt!
+  quality: BigInt!
+  amount: BigInt!
+  resBaseId: BigInt!
+  tLevel: BigInt!
+  ruleId: BigInt!
+  nftType: BigInt!
+  author: Owner!
+  erc20: Bytes!
+  createdTime: BigInt!
+  blockNum: BigInt!
+  lockedDays: BigInt!
+
+  owner: Owner!
+  transactions: [Transaction!]! @derivedFrom(field: "nft")
+  totalTransactions: BigInt!
+  totalOwners: BigInt!
+  burned: Boolean!
+  updatedTimestamp: BigInt!
+}
+
+type Owner @entity {
+  id: ID!
+
+  totalNfts: BigInt!
+  totalNftsMinted: BigInt!
+  totalNftsBurned: BigInt!
+  totalNftsStaking: BigInt!
+  totalTransactions: BigInt!
+  
+  nft: [PositionNFT!]! @derivedFrom(field: "owner")
+  approvalForAllContracts: [Contract!] @derivedFrom(field: "users")
+  transactions: [Transaction!]! @derivedFrom(field: "sender")
+  fromTransactions: [Transaction!]! @derivedFrom(field: "from")
+  toTransactions: [Transaction!]! @derivedFrom(field: "to")
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Minter @entity {
+  id: ID!
+  creator: Bytes!
+  txHash: Bytes!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type Contract @entity {
+  id: ID!
+  name: String!
+  users: [Owner!]!
+  totalApprovalTransactions: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+
+  action: Action!
+  nft: PositionNFT!
+
+  sender: Owner!
+  from: Owner!
+  to: Owner!
+
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type Statistics @entity {
+  id: ID!
+  
+  totalTransactions: BigInt!
+  totalNftsMinted: BigInt!
+  totalNftsBurned: BigInt!
+  totalNftsStaking: BigInt!
+
+  # Factory
+  totalTokenLocked: BigInt!
+  currentTokenLocked: BigInt!
+  totalUniqueMiners: BigInt!
+
+  totalGrade1Minted: BigInt!
+  totalGrade2Minted: BigInt!
+  totalGrade3Minted: BigInt!
+  totalGrade4Minted: BigInt!
+  totalGrade5Minted: BigInt!
+  totalGrade6Minted: BigInt!
+  
+  totalGrade1Burned: BigInt!
+  totalGrade2Burned: BigInt!
+  totalGrade3Burned: BigInt!
+  totalGrade4Burned: BigInt!
+  totalGrade5Burned: BigInt!
+  totalGrade6Burned: BigInt!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type NftDayData @entity {
+  id: ID!
+  
+  date: Int!
+  dailyTokenLocked: BigInt! # Factory
+  dailyNftMinted: BigInt!
+  dailyNftBurned: BigInt!
+  dailyTransactions: BigInt!
+
+  createdBlockNumber: BigInt!
+}
+
+type RewardPool @entity {
+  id: ID!
+  executer: Bytes!
+  amountReward: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}

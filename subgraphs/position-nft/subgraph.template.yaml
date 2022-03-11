@@ -1,0 +1,85 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{{repository}}}
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PositionNFT
+    network: {{network}}
+    source:
+      address: '{{PositionNFTAddress}}'
+      startBlock: {{PositionNFTStartBlock}}
+      abi: PositionNFT
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - PositionNFT
+        - Owner
+        - Contract
+        - Minter
+        - Transaction
+        - Statistics
+        - NftDayData
+      abis:
+        - name: PositionNFT
+          file: ./abis/PositionNFT.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+      file: ./src/mappings/nft.ts
+  - kind: ethereum/contract
+    name: PositionNFTFactory
+    network: {{network}}
+    source:
+      address: '{{PositionNFTFactoryAddress}}'
+      startBlock: {{PositionNFTFactoryStartBlock}}
+      abi: PositionNFTFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - PositionNFT
+        - Owner
+        - Contract
+        - Minter
+        - Transaction
+        - Statistics
+        - NftDayData
+      abis:
+        - name: PositionNFTFactory
+          file: ./abis/PositionNFTFactory.json
+      eventHandlers:
+        - event: GegoAdded(indexed uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,uint256,uint256,uint256)
+          handler: handleGegoAdded
+        - event: GegoBurn(indexed uint256,uint256,address)
+          handler: handleGegoBurn
+      callHandlers:
+        - function: addMinter(address)
+          handler: handleAddMinter
+      file: ./src/mappings/factory.ts
+  - kind: ethereum/contract
+    name: PositionNFTRewardPool
+    network: {{network}}
+    source:
+      address: '{{PositionNFTRewardPoolAddress}}'
+      startBlock: {{PositionNFTRewardPoolStartBlock}}
+      abi: PositionNFTRewardPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - RewardPool
+      abis:
+        - name: PositionNFTRewardPool
+          file: ./abis/PositionNFTRewardPool.json
+      eventHandlers:
+        - event: RewardAdded(uint256)
+          handler: handleRewardAdded
+      file: ./src/mappings/rewardPool.ts
