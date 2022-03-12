@@ -1,0 +1,28 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{{repository}}}
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Fundraising
+    network: {{network}}
+    source:
+      address: '{{BusdAddress}}'
+      startBlock: {{StartBlock}}
+      abi: BUSD
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - Fundraising
+        - AngelInvestor
+        - Transaction
+      abis:
+        - name: BUSD
+          file: ./abis/BUSD.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: './src/mappings/index.ts'

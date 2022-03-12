@@ -1,0 +1,45 @@
+
+type Fundraising @entity {
+  """
+  id: 1
+  """
+  id: ID!
+
+  totalBusdRaised: BigInt!
+  totalBusdClaimed: BigInt!
+  totalTokensMinted: BigInt!
+  totalUniqueAngelInvestors: BigInt!
+  totalBuyTransactions: BigInt!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type AngelInvestor @entity {
+  id: ID!
+
+  totalBusdInvested: BigInt!
+  totalTokensReceived: BigInt!
+  totalTransactions: BigInt!
+
+  transactions: [Transaction!]! @derivedFrom(field: "from")
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+
+  amountBusd: BigInt!
+  amountToken: BigInt!
+
+  from: AngelInvestor!
+
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}

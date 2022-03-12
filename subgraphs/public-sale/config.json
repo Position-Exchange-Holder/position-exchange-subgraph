@@ -1,0 +1,9 @@
+{
+  "network": "bsc",
+  "description": "Position Exchange Public Sale",
+  "repository": "https://github.com/Position-Exchange-Holder/position-exchange-subgraph",
+  "apiVersion": "0.0.5",
+  "FundraisingAddress": "0xe9cf0b4a2ea58c6948f882fb0cda24f8587a03b7",
+  "BusdAddress": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+  "StartBlock": 9191111
+}
