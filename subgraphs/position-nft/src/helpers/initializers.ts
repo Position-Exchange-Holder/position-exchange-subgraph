@@ -1,5 +1,5 @@
 import { ethereum } from '@graphprotocol/graph-ts'
-import { Contract, NftDayData, Owner, PositionNFT, RewardPool, Statistics, Transaction } from '../../generated/schema'
+import { Contract, NftDayData, Owner, PositionNFT, RewardPool, NftStatistic, Transaction } from '../../generated/schema'
 import { GegoAdded } from '../../generated/PositionNFTFactory/PositionNFTFactory'
 import { RewardAdded } from '../../generated/PositionNFTRewardPool/PositionNFTRewardPool'
 import { ONE_BI, ZERO_BI } from '../utils/constant'
@@ -99,11 +99,11 @@ export function initTransaction(
   transaction.save()
 }
 
-export function getOrInitNftStatistics(event: ethereum.Event): Statistics {
-  let nftStatistics = Statistics.load('1')
+export function getOrInitNftStatistics(event: ethereum.Event): NftStatistic {
+  let nftStatistics = NftStatistic.load('1')
 
   if (!nftStatistics) {
-    nftStatistics = new Statistics('1')
+    nftStatistics = new NftStatistic('1')
     
     nftStatistics.totalTransactions = ZERO_BI
     nftStatistics.totalNftsMinted = ZERO_BI

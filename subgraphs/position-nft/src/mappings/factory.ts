@@ -1,6 +1,5 @@
 import { log } from '@graphprotocol/graph-ts'
-import { AddMinterCall, GegoAdded, GegoBurn } from '../../generated/PositionNFTFactory/PositionNFTFactory'
-import { Minter } from '../../generated/schema'
+import { GegoAdded, GegoBurn } from '../../generated/PositionNFTFactory/PositionNFTFactory'
 import { getNft, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initNft } from '../helpers/initializers'
 import { ONE_BI } from '../utils/constant'
 import { minusOnePercent } from '../utils/math'
@@ -83,20 +82,4 @@ export function handleGegoBurn(event: GegoBurn): void {
   }
   nftStatistics.updatedTimestamp = event.block.timestamp
   nftStatistics.save()
-}
-
-export function handleAddMinter(call: AddMinterCall): void {
-  let minterAddress = call.inputs.minter.toHex()
-  let minter = Minter.load(minterAddress)
-  if (minter) {
-    log.error('Minter {} is exists', [minterAddress])
-    return
-  }
-
-  minter = new Minter(minterAddress)
-  minter.creator = call.transaction.from
-  minter.txHash = call.transaction.hash
-  minter.createdBlockNumber = call.block.number
-  minter.createdTimestamp = call.block.timestamp
-  minter.save()
 }
