@@ -1,26 +1,11 @@
 import { ethereum } from '@graphprotocol/graph-ts'
 import { Contract, NftDayData, Owner, PositionNFT, RewardPool, NftStatistic, Transaction } from '../../generated/schema'
-import { GegoAdded } from '../../generated/PositionNFTFactory/PositionNFTFactory'
 import { RewardAdded } from '../../generated/PositionNFTRewardPool/PositionNFTRewardPool'
 import { ONE_BI, ZERO_BI } from '../utils/constant'
 
-export function initNft(event: GegoAdded): PositionNFT {
-  let nft = new PositionNFT(event.params.id.toString())
+export function initNft(tokenId: string, event: ethereum.Event): PositionNFT {
+  let nft = new PositionNFT(tokenId)
   
-  // Attributes
-  nft.grade = event.params.grade
-  nft.quality = event.params.quality
-  nft.amount = event.params.amount
-  nft.resBaseId = event.params.resBaseId
-  nft.tLevel = event.params.tLevel
-  nft.ruleId = event.params.ruleId
-  nft.nftType = event.params.nftType
-  nft.author = event.params.author.toHex()
-  nft.erc20 = event.params.erc20
-  nft.blockNum = event.params.blockNum
-  nft.lockedDays = event.params.lockedDays
-
-  nft.owner = event.params.author.toHex()
   nft.totalTransactions = ONE_BI
   nft.totalOwners = ONE_BI
   nft.burned = false
@@ -31,11 +16,11 @@ export function initNft(event: GegoAdded): PositionNFT {
   return nft
 }
 
-export function getNft(tokenId: string): PositionNFT | null {
+export function getOrInitNft(tokenId: string, event: ethereum.Event): PositionNFT {
   let nft = PositionNFT.load(tokenId)
 
   if (!nft) {
-    return null
+    return initNft(tokenId, event)
   }
 
   return nft
@@ -158,7 +143,7 @@ export function getOrInitNftDayData(event: ethereum.Event): NftDayData {
 }
 
 export function initRewardPool(event: RewardAdded): RewardPool {
-  let rewardPool = new RewardPool(event.transaction.hash.toHex())
+  let rewardPool = new RewardPool(event.transaction.hash.toHexString())
   rewardPool.executer = event.transaction.from
   rewardPool.amountReward = event.params.reward
   rewardPool.createdBlockNumber = event.block.number

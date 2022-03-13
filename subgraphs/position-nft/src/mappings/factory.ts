@@ -1,15 +1,29 @@
 import { log } from '@graphprotocol/graph-ts'
 import { GegoAdded, GegoBurn } from '../../generated/PositionNFTFactory/PositionNFTFactory'
-import { getNft, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initNft } from '../helpers/initializers'
+import { getOrInitNft, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initNft } from '../helpers/initializers'
 import { ONE_BI } from '../utils/constant'
 import { minusOnePercent } from '../utils/math'
 
 export function handleGegoAdded(event: GegoAdded): void {
   // Create new owner
-  let owner = getOrInitOwner(event.params.author.toHex(), event)
+  let owner = getOrInitOwner(event.params.author.toHexString(), event)
 
   // Create new nft
-  initNft(event)
+  let nft = getOrInitNft(event.params.id.toString(), event)
+  nft.grade = event.params.grade
+  nft.quality = event.params.quality
+  nft.amount = event.params.amount
+  nft.resBaseId = event.params.resBaseId
+  nft.tLevel = event.params.tLevel
+  nft.ruleId = event.params.ruleId
+  nft.nftType = event.params.nftType
+  nft.author = event.params.author.toHexString()
+  nft.erc20 = event.params.erc20
+  nft.blockNum = event.params.blockNum
+  nft.lockedDays = event.params.lockedDays
+  
+  nft.owner = event.params.author.toHexString()
+  nft.save()
 
   // Update statistics
   let nftStatistics = getOrInitNftStatistics(event)
@@ -50,11 +64,7 @@ export function handleGegoAdded(event: GegoAdded): void {
 }
 
 export function handleGegoBurn(event: GegoBurn): void {
-  let nft = getNft(event.params.id.toString())
-  if (!nft) {
-    log.error('Id {} is not exists', [event.params.id.toString()])
-    return
-  }
+  let nft = getOrInitNft(event.params.id.toString(), event)
 
   let nftStatistics = getOrInitNftStatistics(event)
   nftStatistics.currentTokenLocked = nftStatistics.currentTokenLocked.minus(minusOnePercent(event.params.amount))

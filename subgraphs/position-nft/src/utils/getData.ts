@@ -1,4 +1,9 @@
-import { NFT_MARKETPLACE_PROXY_ADDRESS, NFT_REWARD_POOL_ADDRESS, ZERO_ADDRESS } from './constant'
+import { 
+  NFT_FACTORY_ADDRESS,
+  NFT_MARKETPLACE_PROXY_ADDRESS,
+  NFT_REWARD_POOL_ADDRESS,
+  ZERO_ADDRESS
+} from './constant'
 
 export function getNftTransferAction(from: string, to: string): string {
   from = from.toString().toLowerCase()
@@ -24,11 +29,15 @@ export function getNftTransferAction(from: string, to: string): string {
 }
 
 export function getContractName(contractAddress: string): string {
-  if (contractAddress == NFT_REWARD_POOL_ADDRESS) {
-    return 'NFT Reward Pool'
+  if (contractAddress.toLowerCase() == NFT_FACTORY_ADDRESS) {
+    return 'PositionFactory'
   }
-  if (contractAddress == NFT_MARKETPLACE_PROXY_ADDRESS) {
-    return 'NFT Marketplace'
+
+  if (contractAddress.toLowerCase() == NFT_REWARD_POOL_ADDRESS) {
+    return 'PositionRewardPool'
+  }
+  if (contractAddress.toLowerCase() == NFT_MARKETPLACE_PROXY_ADDRESS) {
+    return 'PositionMarketplace'
   }
 
   return ''

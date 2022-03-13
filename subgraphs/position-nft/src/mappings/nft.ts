@@ -1,21 +1,15 @@
 import { log } from '@graphprotocol/graph-ts'
 import { ApprovalForAll, Transfer } from '../../generated/PositionNFT/PositionNFT'
-import { getNft, getOrInitContract, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initTransaction } from '../helpers/initializers'
+import { getOrInitNft, getOrInitContract, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initTransaction } from '../helpers/initializers'
 import { ONE_BI, ZERO_BI } from '../utils/constant'
 import { getContractName, getNftTransferAction } from '../utils/getData'
 
 export function handleTransfer(event: Transfer): void {
-  let nft = getNft(event.params.tokenId.toString())
-  if (!nft) {
-    log.error('Id {} is not exists', [
-      event.params.tokenId.toString()
-    ])
-    return
-  }
+  let nft = getOrInitNft(event.params.tokenId.toString(), event)
 
-  let sender = getOrInitOwner(event.transaction.from.toHex(), event)
-  let from = getOrInitOwner(event.params.from.toHex(), event)
-  let to = getOrInitOwner(event.params.to.toHex(), event)
+  let sender = getOrInitOwner(event.transaction.from.toHexString(), event)
+  let from = getOrInitOwner(event.params.from.toHexString(), event)
+  let to = getOrInitOwner(event.params.to.toHexString(), event)
   let nftStatistics = getOrInitNftStatistics(event)
   let nftDayData = getOrInitNftDayData(event)
 
@@ -25,7 +19,7 @@ export function handleTransfer(event: Transfer): void {
   if (action == 'Mint') {
     sender.totalNftsMinted = sender.totalNftsMinted.plus(ONE_BI)
     nftStatistics.totalNftsMinted = nftStatistics.totalNftsMinted.plus(ONE_BI)
-
+    nftDayData.dailyNftMinted = nftDayData.dailyNftMinted.plus(ONE_BI)
   }
 
   // Burn
@@ -78,10 +72,12 @@ export function handleTransfer(event: Transfer): void {
   sender.save()
   from.save()
   to.save()
+  nft.save()
   nftStatistics.save()
   nftDayData.save()
   
-  log.info('{} transferred {} to {}', [
+  log.info('[{}] {} transfer {} to {}', [
+    action,
     from.id,
     nft.id,
     to.id
@@ -93,13 +89,13 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
     return
   }
 
-  let user = getOrInitOwner(event.params.owner.toHex(), event)
-  let contract = getOrInitContract(event.params.operator.toHex(), event)
+  let user = getOrInitOwner(event.params.owner.toHexString(), event)
+  let contract = getOrInitContract(event.params.operator.toHexString(), event)
   let updatedUsers = contract.users
   updatedUsers.push(user.id)
   
   contract.users = updatedUsers
-  let contractName = getContractName(event.params.operator.toString().toLowerCase())
+  let contractName = getContractName(event.params.operator.toHexString())
   contract.name = contractName
   contract.totalApprovalTransactions = contract.totalApprovalTransactions.plus(ONE_BI)
   contract.updatedTimestamp = event.block.timestamp
