@@ -61,6 +61,7 @@ export function handleTransfer(event: Transfer): void {
   initTransaction(
     event.transaction.hash.toHex(),
     action,
+    nft.grade,
     nft,
     sender,
     from,

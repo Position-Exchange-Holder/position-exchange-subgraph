@@ -68,6 +68,7 @@ type Transaction @entity {
   id: ID!
 
   action: Action!
+  grade: BigInt!
   nft: PositionNFT!
 
   sender: Owner!

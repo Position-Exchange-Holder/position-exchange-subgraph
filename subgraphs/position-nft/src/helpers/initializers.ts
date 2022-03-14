@@ -1,4 +1,4 @@
-import { ethereum } from '@graphprotocol/graph-ts'
+import { ethereum, BigInt } from '@graphprotocol/graph-ts'
 import { Contract, NftDayData, Owner, PositionNFT, RewardPool, NftStatistic, Transaction } from '../../generated/schema'
 import { RewardAdded } from '../../generated/PositionNFTRewardPool/PositionNFTRewardPool'
 import { ONE_BI, ZERO_BI } from '../utils/constant'
@@ -65,6 +65,7 @@ export function getOrInitContract(contractAddress: string, event: ethereum.Event
 export function initTransaction(
   txHash: string,
   action: string,
+  grade: BigInt,
   nft: PositionNFT,
   sender: Owner,
   from: Owner,
@@ -73,6 +74,7 @@ export function initTransaction(
 ): void {
   let transaction = new Transaction(txHash)
   transaction.action = action
+  transaction.grade = grade
   transaction.nft = nft.id
   transaction.sender = sender.id
   transaction.from = from.id

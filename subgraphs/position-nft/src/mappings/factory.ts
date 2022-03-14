@@ -1,4 +1,3 @@
-import { log } from '@graphprotocol/graph-ts'
 import { GegoAdded, GegoBurn } from '../../generated/PositionNFTFactory/PositionNFTFactory'
 import { getOrInitNft, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initNft } from '../helpers/initializers'
 import { ONE_BI } from '../utils/constant'
