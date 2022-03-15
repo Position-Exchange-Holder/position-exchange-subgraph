@@ -1,5 +1,5 @@
 import { OperatorUpdated, ReferralCommissionRecorded, ReferralRecorded } from '../../generated/PositionReferral/PositionReferral'
-import { getOrInitOperator, getOrInitReferrer, getOrInitUserReferralRecord } from '../helpers/initializers'
+import { getOrInitOperator, getOrInitPositionReferral, getOrInitReferrer, getOrInitUserReferralRecord } from '../helpers/initializers'
 import { ONE_BI } from '../utils/constant'
 
 export function handleOperatorUpdated(event: OperatorUpdated): void {
@@ -15,6 +15,11 @@ export function handleReferralRecorded(event: ReferralRecorded): void {
   referrer.totalReferrals = referrer.totalReferrals.plus(ONE_BI)
   referrer.updatedTimestamp = event.block.timestamp
   referrer.save()
+
+  let positionReferral = getOrInitPositionReferral(event)
+  positionReferral.totalReferrals = positionReferral.totalReferrals.plus(ONE_BI)
+  positionReferral.updatedTimestamp = event.block.timestamp
+  positionReferral.save()
   
   getOrInitUserReferralRecord(referrerAddress + ':' + userAddress, referrer, event)
 }
@@ -24,6 +29,11 @@ export function handleReferralCommissionRecorded(event: ReferralCommissionRecord
   referrer.totalReferralCommissions = referrer.totalReferralCommissions.plus(event.params.commission)
   referrer.updatedTimestamp = event.block.timestamp
   referrer.save()
+
+  let positionReferral = getOrInitPositionReferral(event)
+  positionReferral.totalReferralCommissions = positionReferral.totalReferralCommissions.plus(event.params.commission)
+  positionReferral.updatedTimestamp = event.block.timestamp
+  positionReferral.save()
 
   let userReferralRecord = getOrInitUserReferralRecord(
     referrer.id + ':' + event.transaction.from.toHex(),

@@ -1,6 +1,21 @@
 import { ethereum } from '@graphprotocol/graph-ts'
-import { Operator, Referrer, UserReferralRecord } from '../../generated/schema'
+import { Operator, Referrer, UserReferralRecord, PositionReferral } from '../../generated/schema'
 import { ZERO_BI } from '../utils/constant'
+
+export function getOrInitPositionReferral(event: ethereum.Event): PositionReferral {
+  let positionReferral = PositionReferral.load('1')
+  if (!positionReferral) {
+    positionReferral = new PositionReferral('1')
+    positionReferral.totalReferrals = ZERO_BI
+    positionReferral.totalReferralCommissions = ZERO_BI
+    positionReferral.createdBlockNumber = event.block.number
+    positionReferral.createdTimestamp = event.block.timestamp
+    positionReferral.updatedTimestamp = event.block.timestamp
+    positionReferral.save()
+  }
+
+  return positionReferral
+}
 
 export function getOrInitOperator(operatorAddress: string, event: ethereum.Event): Operator {
   let operator = Operator.load(operatorAddress)

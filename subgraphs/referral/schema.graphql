@@ -1,3 +1,15 @@
+type PositionReferral @entity {
+  """
+  id: 1
+  """
+  id: ID!
+  totalReferrals: BigInt!
+  totalReferralCommissions: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
 interface UserInterface {
   id: ID!
   createdBlockNumber: BigInt!

@@ -16,6 +16,7 @@ dataSources:
       apiVersion: {{apiVersion}}
       language: wasm/assemblyscript
       entities:
+        - PositionReferral
         - Operator
         - Referrer
         - UserReferralRecord
