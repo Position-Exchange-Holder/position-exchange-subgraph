@@ -1,0 +1,85 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{{repository}}}
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PositionToken
+    network: {{network}}
+    source:
+      address: '{{PositionTokenAddress}}'
+      startBlock: {{PositionTokenStartBlock}}
+      abi: PositionToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - PositionToken
+        - PositionTokenPriceAndVolume 
+        - PositionTokenDayData
+        - User
+        - Transaction
+        - DonateRecord
+        - BotKeeper
+        - Treasury
+      abis:
+        - name: PositionToken
+          file: ./abis/PositionToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Donate(indexed address,indexed uint256)
+          handler: handleDonate
+        - event: BotKeeperChanged(indexed address,indexed address)
+          handler: handleBotKeeperChanged
+        - event: TreasuryContractChanged(indexed address,indexed address)
+          handler: handleTreasuryContractChanged
+      blockHandlers:
+        - handler: handleBlock
+      file: ./src/mappings/token.ts
+  - kind: ethereum/contract
+    name: PancakeFactory
+    network: {{network}}
+    source:
+      address: '{{PancakeFactoryAddress}}'
+      startBlock: {{PancakeFactoryStartBlock}}
+      abi: PancakeFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - PositionToken
+        - Market
+      abis:
+        - name: PancakeFactory
+          file: ./abis/Factory.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handlePairCreated
+      file: ./src/mappings/factoryAndPair.ts
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: {{network}}
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      file: ./src/mappings/factoryAndPair.ts
+      entities:
+        - PositionTokenPriceAndVolume
+        - PositionTokenDayData
+        - User
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+        - name: Pair
+          file: ./abis/Pair.json
+      eventHandlers:
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleSwap

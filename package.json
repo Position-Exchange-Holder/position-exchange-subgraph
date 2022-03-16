@@ -17,7 +17,8 @@
     "deploy:bond:3": "cd subgraphs/bond/bond03/ && npm run subgraph:deploy",
     "deploy:nft": "cd subgraphs/position-nft/ && npm run subgraph:deploy",
     "deploy:referral": "cd subgraphs/referral/ && npm run subgraph:deploy",
-    "deploy:public-sale": "cd subgraphs/public-sale/ && npm run subgraph:deploy"
+    "deploy:public-sale": "cd subgraphs/public-sale/ && npm run subgraph:deploy",
+    "deploy:token": "cd subgraphs/position-token/ && npm run subgraph:deploy"
   },
   "dependencies": {
     "@graphprotocol/graph-ts": "^0.25.0",

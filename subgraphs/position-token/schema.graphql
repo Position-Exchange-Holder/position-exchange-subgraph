@@ -1,0 +1,162 @@
+enum Action {
+  Mint
+  Burn
+  Transfer
+}
+
+type PositionToken @entity {
+  """
+  id: 1
+  """
+  id: ID!
+
+  """
+  Metadata
+  """
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+  maxSupply: BigInt!
+  
+  totalMinted: BigInt!
+  totalBurned: BigInt!
+
+  markets: [Market!]!
+  prices: PositionTokenPriceAndVolume!
+
+  totalTransactions: BigInt!
+  totalHolders: BigInt!
+  totalRFIRedistributed: BigDecimal!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+# Pancake LP
+type Market @entity {
+  id: ID!
+  name: String!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type PositionTokenPriceAndVolume @entity {
+  id: ID!
+  priceInBUSD: BigDecimal!
+  priceInBNB: BigDecimal!
+  totalVolumeInBUSD: BigDecimal!
+  updatedBlockNumber: BigInt!
+}
+
+type PositionTokenDayData @entity {
+  id: ID!
+  date: Int!
+
+  # Transfer
+  dailyActiveAddresses: BigInt!
+  dailyNewUniqueAddresses: BigInt!
+  dailyTransactions: BigInt!
+  dailyRFIRedistributed: BigDecimal!
+  
+  # Swap
+  priceInBUSD: BigDecimal
+  priceInBNB: BigDecimal
+  dailyVolumeInBUSD: BigDecimal!
+
+  createdBlockNumber: BigInt!
+}
+
+type User @entity {
+  """
+  Address
+  """
+  id: ID!
+  label: String
+
+  balance: BigInt!
+
+  totalTokensBuy: BigInt!
+  totalTokensSell: BigInt!
+  totalVolumeInBUSD: BigDecimal!
+
+  totalTransactions: BigInt!
+  fromTransactions: [Transaction!]! @derivedFrom(field: "from")
+  toTransactions: [Transaction!]! @derivedFrom(field: "to")
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Transaction @entity {
+  """
+  txHash
+  """
+  id: ID!
+
+  amount: BigInt!
+  action: Action!
+  
+  from: User!
+  to: User!
+
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type DonateRecord @entity {
+  id: ID!
+  donor: Bytes!
+  amount: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+interface SystemContract {
+  """
+  id: 1
+  """
+  id: ID!
+  txHash: Bytes!
+  creator: Bytes!
+  currentAddress: Bytes!
+  previousTxHashes: [Bytes!]!
+  previousAddresses: [Bytes!]!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type BotKeeper implements SystemContract @entity {
+ """
+  id: 1
+  """
+  id: ID!
+  txHash: Bytes!
+  creator: Bytes!
+  currentAddress: Bytes!
+  previousTxHashes: [Bytes!]!
+  previousAddresses: [Bytes!]!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Treasury implements SystemContract @entity {
+ """
+  id: 1
+  """
+  id: ID!
+  txHash: Bytes!
+  creator: Bytes!
+  currentAddress: Bytes!
+  previousTxHashes: [Bytes!]!
+  previousAddresses: [Bytes!]!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
