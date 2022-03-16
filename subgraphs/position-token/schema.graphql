@@ -37,8 +37,11 @@ type PositionToken @entity {
 type Market @entity {
   id: ID!
   name: String!
+  totalTransactions: BigInt!
+  totalVolumeInBUSD: BigDecimal!
   createdBlockNumber: BigInt!
   createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
 }
 
 type PositionTokenPriceAndVolume @entity {

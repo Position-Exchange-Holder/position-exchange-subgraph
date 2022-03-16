@@ -1,10 +1,28 @@
-import { ethereum, BigInt } from '@graphprotocol/graph-ts'
+import { ethereum, BigInt, Address, log } from '@graphprotocol/graph-ts'
 import { BotKeeperChanged, Donate, TreasuryContractChanged } from '../../generated/PositionToken/PositionToken'
-import { BotKeeper, DonateRecord, PositionToken, Treasury, User, Transaction, PositionTokenDayData, PositionTokenPriceAndVolume } from '../../generated/schema'
+import { BotKeeper, DonateRecord, PositionToken, Treasury, User, Transaction, PositionTokenDayData, PositionTokenPriceAndVolume, Market } from '../../generated/schema'
+import { Pair as PairTemplate } from '../../generated/templates'
 import { BD_ZERO, DEFAULT_ID, TOKEN_MAX_SUPPLY, ZERO_BI } from '../utils/constant'
 import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from '../helpers/fetchTokenInfo'
 import { getAddressLabel } from '../utils/getData'
 import { getPosiPriceInBNB, getPosiPriceInBUSD } from './getPrices'
+import { LP_PAIRS } from '../utils/addresses'
+
+export function getOrInitMarket(marketAddress: string, event: ethereum.Event): Market {
+  let market = Market.load(marketAddress)
+  if (!market) {
+    market = new Market(marketAddress)
+    market.name = ''
+    market.totalTransactions = ZERO_BI
+    market.totalVolumeInBUSD = BD_ZERO
+    market.createdBlockNumber = event.block.number
+    market.createdTimestamp = event.block.timestamp
+    market.updatedTimestamp = event.block.timestamp
+    market.save()
+  }
+
+  return market
+}
 
 export function getOrInitPositionToken(event: ethereum.Event): PositionToken {
   let positionToken = PositionToken.load(DEFAULT_ID)
@@ -22,7 +40,6 @@ export function getOrInitPositionToken(event: ethereum.Event): PositionToken {
     positionToken.totalMinted = ZERO_BI
     positionToken.totalBurned = ZERO_BI
 
-    positionToken.markets = []
     positionToken.prices = getOrInitPositionTokenPriceAndVolume(event.block.number).id
 
     positionToken.totalTransactions = ZERO_BI
@@ -33,6 +50,20 @@ export function getOrInitPositionToken(event: ethereum.Event): PositionToken {
     positionToken.createdTimestamp = event.block.timestamp
     positionToken.updatedTimestamp = event.block.timestamp
 
+    let markets: string[] = []
+    for (let i = 0; i < LP_PAIRS.length - 1; i++) {
+      let lpAddress = LP_PAIRS[i]
+      PairTemplate.create(Address.fromString(lpAddress))
+      let market = getOrInitMarket(lpAddress, event)
+      market.name = i == 0 ? 'POSI/BUSD' : 'POSI/WBNB'
+      market.save()
+
+      markets.push(market.id)
+
+      log.info('Created pair with address {}.', [lpAddress])
+    }
+
+    positionToken.markets = markets
     positionToken.save()
   }
 
