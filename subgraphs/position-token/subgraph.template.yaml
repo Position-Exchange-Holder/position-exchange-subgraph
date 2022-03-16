@@ -27,6 +27,8 @@ dataSources:
       abis:
         - name: PositionToken
           file: ./abis/PositionToken.json
+        - name: Pair
+          file: ./abis/Pair.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -56,6 +58,8 @@ dataSources:
       abis:
         - name: PancakeFactory
           file: ./abis/Factory.json
+        - name: Pair
+          file: ./abis/Pair.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
           handler: handlePairCreated

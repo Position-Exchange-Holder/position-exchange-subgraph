@@ -39,7 +39,7 @@ export function handleTransfer(event: Transfer): void {
   }
 
   // Transfer
-  from.balance = from.balance.minus(amount)
+  from.balance = action == ACTION_MINT ? from.balance : from.balance.minus(amount)
   to.balance = to.balance.plus(amount)
   
   // Create transaction
