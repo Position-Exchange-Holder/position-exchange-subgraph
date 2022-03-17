@@ -1,4 +1,4 @@
-import { ethereum, BigInt, Address, log } from '@graphprotocol/graph-ts'
+import { ethereum, BigInt, Address, log, BigDecimal } from '@graphprotocol/graph-ts'
 import { BotKeeperChanged, Donate, TreasuryContractChanged } from '../../generated/PositionToken/PositionToken'
 import { BotKeeper, DonateRecord, PositionToken, Treasury, User, Transaction, PositionTokenDayData, PositionTokenPriceAndVolume, Market } from '../../generated/schema'
 import { Pair as PairTemplate } from '../../generated/templates'
@@ -35,10 +35,10 @@ export function getOrInitPositionToken(event: ethereum.Event): PositionToken {
     positionToken.name = tokenName
     positionToken.symbol = tokenSymbol
     positionToken.decimals = tokenDecimals
-    positionToken.maxSupply = BigInt.fromI32(TOKEN_MAX_SUPPLY).times(tokenDecimals)
+    positionToken.maxSupply = BigDecimal.fromString(TOKEN_MAX_SUPPLY.toString()).times(BigDecimal.fromString('1e18'))
 
-    positionToken.totalMinted = ZERO_BI
-    positionToken.totalBurned = ZERO_BI
+    positionToken.totalMinted = BD_ZERO
+    positionToken.totalBurned = BD_ZERO
 
     positionToken.prices = getOrInitPositionTokenPriceAndVolume(event.block.number).id
 

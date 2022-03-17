@@ -16,10 +16,10 @@ type PositionToken @entity {
   name: String!
   symbol: String!
   decimals: BigInt!
-  maxSupply: BigInt!
+  maxSupply: BigDecimal!
   
-  totalMinted: BigInt!
-  totalBurned: BigInt!
+  totalMinted: BigDecimal!
+  totalBurned: BigDecimal!
 
   markets: [Market!]!
   prices: PositionTokenPriceAndVolume!

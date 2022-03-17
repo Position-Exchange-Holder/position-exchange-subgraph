@@ -1,4 +1,4 @@
-import { BigInt, ethereum } from '@graphprotocol/graph-ts'
+import { BigDecimal, BigInt, ethereum } from '@graphprotocol/graph-ts'
 import { BotKeeperChanged, Donate, Transfer, TreasuryContractChanged } from '../../generated/PositionToken/PositionToken'
 import { updatePositionTokenDayData } from '../helpers/dailyUpdates'
 import { getPosiPriceInBNB, getPosiPriceInBUSD } from '../helpers/getPrices'
@@ -30,12 +30,12 @@ export function handleTransfer(event: Transfer): void {
   let action = getTransferAction(from.id, to.id)
   // Mint
   if (action == ACTION_MINT) {
-    positionToken.totalMinted = positionToken.totalMinted.plus(amount)
+    positionToken.totalMinted = positionToken.totalMinted.plus(BigDecimal.fromString(amount.toString()))
   }
 
   // Burn
   if (action == ACTION_BURN) {
-    positionToken.totalBurned = positionToken.totalBurned.plus(amount)
+    positionToken.totalBurned = positionToken.totalBurned.plus(BigDecimal.fromString(amount.toString()))
   }
 
   // Transfer
