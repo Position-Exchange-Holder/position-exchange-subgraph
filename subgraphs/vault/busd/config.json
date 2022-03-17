@@ -1,0 +1,8 @@
+{
+  "network": "bsc",
+  "description": "position-busd-vault-subgraph",
+  "repository": "https://github.com/Position-Exchange-Holder/position-exchange-subgraph",
+  "apiVersion": "0.0.5",
+  "PositionBusdVaultAddress": "0xf35848441017917a034589bfbec4b3783bb39cb2",
+  "PositionBusdVaultStartBlock": 11652873
+}

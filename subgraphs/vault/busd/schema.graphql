@@ -1,0 +1,29 @@
+type PositionVault @entity {
+  id: ID!
+  totalCompoundTransactions: BigInt!
+  totalRewardPaidForCompounder: BigInt!
+  totalUniqueCompounders: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Compounder @entity {
+  id: ID!
+  transactions: [Transaction!]! @derivedFrom(field: "sender")
+  totalCompoundTransactions: BigInt!
+  totalRewardEarned: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  reward: BigInt!
+  sender: Compounder!
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
