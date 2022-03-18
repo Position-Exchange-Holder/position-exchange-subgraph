@@ -18,7 +18,9 @@ dataSources:
       entities:
         - PositionVault
         - Compounder
-        - Transaction
+        - User
+        - CompoundTransaction
+        - HarvestTransaction
       abis:
         - name: PositionBusdVault
           file: ./abis/PositionBusdVault.json
