@@ -1,0 +1,32 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{{repository}}}
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PositionBnbVault
+    network: {{network}}
+    source:
+      address: '{{PositionBnbVaultAddress}}'
+      startBlock: {{PositionBnbVaultStartBlock}}
+      abi: PositionBnbVault
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - PositionVault
+        - Compounder
+        - User
+        - CompoundTransaction
+        - HarvestTransaction
+      abis:
+        - name: PositionBnbVault
+          file: ./abis/PositionBnbVault.json
+      eventHandlers:
+        - event: Compound(address,uint256)
+          handler: handleCompound
+        - event: RewardPaid(address,uint256)
+          handler: handleRewardPaid
+      file: ./src/mappings/vault.ts
