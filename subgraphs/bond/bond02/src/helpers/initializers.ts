@@ -1,4 +1,4 @@
-import { Address, ethereum } from '@graphprotocol/graph-ts'
+import { Address, dataSource, ethereum } from '@graphprotocol/graph-ts'
 import { Bondholder, BondInfo } from '../../generated/schema'
 import { BondCreated } from '../../generated/PositionBond02/PositionBond02'
 import { ZERO_BI } from '../utils/constant'
@@ -9,6 +9,7 @@ export function initBondInfo(event: BondCreated): BondInfo {
   // Metadata
   bondInfo.name = event.params.bondName
   bondInfo.symbol = event.params.bondSymbol
+  bondInfo.contractAddress = dataSource.address()
   bondInfo.underlyingAsset = event.params.underlyingAsset
   bondInfo.collateralAmount = event.params.collateralAmount
   bondInfo.faceAsset = event.params.faceAsset

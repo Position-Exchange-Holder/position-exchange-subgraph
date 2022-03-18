@@ -18,6 +18,7 @@ type BondInfo @entity {
   """
   name: String!
   symbol: String!
+  contractAddress: Bytes!
   underlyingAsset: Bytes!
   collateralAmount: BigInt!
   faceAsset: Bytes!
