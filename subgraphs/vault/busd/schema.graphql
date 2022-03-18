@@ -8,9 +8,17 @@ type PositionVault @entity {
   updatedTimestamp: BigInt!
 }
 
-type Compounder @entity {
+interface UserInterface {
   id: ID!
-  transactions: [Transaction!]! @derivedFrom(field: "sender")
+  totalRewardEarned: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Compounder implements UserInterface @entity {
+  id: ID!
+  transactions: [CompoundTransaction!]! @derivedFrom(field: "sender")
   totalCompoundTransactions: BigInt!
   totalRewardEarned: BigInt!
   createdBlockNumber: BigInt!
@@ -18,10 +26,39 @@ type Compounder @entity {
   updatedTimestamp: BigInt!
 }
 
-type Transaction @entity {
+type User @entity {
+  id: ID!
+  transactions: [HarvestTransaction!]! @derivedFrom(field: "sender")
+  totalHarvestTransactions: BigInt!
+  totalRewardEarned: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+interface TransactionInterface {
+  id: ID!
+  reward: BigInt!
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type CompoundTransaction implements TransactionInterface @entity {
   id: ID!
   reward: BigInt!
   sender: Compounder!
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type HarvestTransaction implements TransactionInterface @entity {
+  id: ID!
+  reward: BigInt!
+  sender: User!
   gasLimit: BigInt!
   gasPrice: BigInt!
   createdBlockNumber: BigInt!

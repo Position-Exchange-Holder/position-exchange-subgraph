@@ -1,5 +1,5 @@
 import { ethereum, BigInt } from '@graphprotocol/graph-ts'
-import { Compounder, PositionVault, Transaction } from '../../generated/schema'
+import { Compounder, PositionVault, CompoundTransaction, HarvestTransaction, User } from '../../generated/schema'
 import { ZERO_BI } from '../utils/constant'
 
 export function getOrInitPositionVault(event: ethereum.Event): PositionVault {
@@ -33,8 +33,42 @@ export function getOrInitCompounder(compounderAddress: string, event: ethereum.E
   return compounder
 }
 
-export function initTransaction(sender: Compounder, reward: BigInt, event: ethereum.Event): void {
-  let transaction = new Transaction(event.transaction.hash.toString())
+export function getOrInitUser(userAddress: string, event: ethereum.Event): User {
+  let user = User.load(userAddress)
+  if (!user) {
+    user = new User(userAddress)
+    user.totalHarvestTransactions = ZERO_BI
+    user.totalRewardEarned = ZERO_BI
+    user.createdBlockNumber = event.block.number
+    user.createdTimestamp = event.block.timestamp
+    user.updatedTimestamp = event.block.timestamp
+    user.save()
+  }
+
+  return user
+}
+
+export function initCompoundTransaction(
+  sender: Compounder,
+  reward: BigInt,
+  event: ethereum.Event
+): void {
+  let transaction = new CompoundTransaction(event.transaction.hash.toString())
+  transaction.sender = sender.id
+  transaction.reward = reward
+  transaction.gasLimit = event.transaction.gasLimit
+  transaction.gasPrice = event.transaction.gasPrice
+  transaction.createdBlockNumber = event.block.number
+  transaction.createdTimestamp = event.block.timestamp
+  transaction.save()
+}
+
+export function initHarvestTransaction(
+  sender: User,
+  reward: BigInt,
+  event: ethereum.Event
+): void {
+  let transaction = new HarvestTransaction(event.transaction.hash.toString())
   transaction.sender = sender.id
   transaction.reward = reward
   transaction.gasLimit = event.transaction.gasLimit

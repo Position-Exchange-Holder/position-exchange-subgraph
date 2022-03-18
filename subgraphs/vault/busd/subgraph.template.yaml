@@ -25,4 +25,6 @@ dataSources:
       eventHandlers:
         - event: Compound(address,uint256)
           handler: handleCompound
+        - event: RewardPaid(address,uint256)
+          handler: handleRewardPaid
       file: ./src/mappings/vault.ts

@@ -1,5 +1,5 @@
-import { Compound } from '../../generated/PositionBusdVault/PositionBusdVault'
-import { getOrInitCompounder, getOrInitPositionVault, initTransaction } from '../helpers/initializers'
+import { Compound, RewardPaid } from '../../generated/PositionBusdVault/PositionBusdVault'
+import { getOrInitCompounder, getOrInitPositionVault, getOrInitUser, initCompoundTransaction, initHarvestTransaction } from '../helpers/initializers'
 import { ONE_BI } from '../utils/constant'
 
 export function handleCompound(event: Compound): void {
@@ -21,5 +21,18 @@ export function handleCompound(event: Compound): void {
   positionVault.updatedTimestamp = event.block.timestamp
   positionVault.save()
 
-  initTransaction(compounder, rewardAmount, event)
+  initCompoundTransaction(compounder, rewardAmount, event)
+}
+
+export function handleRewardPaid(event: RewardPaid): void {
+  let userAddress = event.params.account
+  let rewardAmount = event.params.reward
+
+  let user = getOrInitUser(userAddress.toHexString(), event)
+  user.totalHarvestTransactions = user.totalHarvestTransactions.plus(ONE_BI)
+  user.totalRewardEarned = user.totalRewardEarned.plus(rewardAmount)
+  user.updatedTimestamp = event.block.timestamp
+  user.save()
+
+  initHarvestTransaction(user, rewardAmount, event)
 }
