@@ -19,9 +19,9 @@ export function getOrInitPositionVault(event: ethereum.Event): PositionVault {
 }
 
 export function getOrInitCompounder(compounderAddress: string, event: ethereum.Event): Compounder {
-  let compounder = Compounder.load(compounderAddress)
+  let compounder = Compounder.load('C' + compounderAddress)
   if (!compounder) {
-    compounder = new Compounder(compounderAddress)
+    compounder = new Compounder('C' + compounderAddress)
     compounder.totalCompoundTransactions = ZERO_BI
     compounder.totalRewardEarned = ZERO_BI
     compounder.createdBlockNumber = event.block.number
@@ -34,9 +34,9 @@ export function getOrInitCompounder(compounderAddress: string, event: ethereum.E
 }
 
 export function getOrInitUser(userAddress: string, event: ethereum.Event): User {
-  let user = User.load(userAddress)
+  let user = User.load('U' + userAddress)
   if (!user) {
-    user = new User(userAddress)
+    user = new User('U' + userAddress)
     user.totalHarvestTransactions = ZERO_BI
     user.totalRewardEarned = ZERO_BI
     user.createdBlockNumber = event.block.number
@@ -53,7 +53,7 @@ export function initCompoundTransaction(
   reward: BigInt,
   event: ethereum.Event
 ): void {
-  let transaction = new CompoundTransaction(event.transaction.hash.toString())
+  let transaction = new CompoundTransaction(event.transaction.hash.toHexString())
   transaction.sender = sender.id
   transaction.reward = reward
   transaction.gasLimit = event.transaction.gasLimit
@@ -68,7 +68,7 @@ export function initHarvestTransaction(
   reward: BigInt,
   event: ethereum.Event
 ): void {
-  let transaction = new HarvestTransaction(event.transaction.hash.toString())
+  let transaction = new HarvestTransaction(event.transaction.hash.toHexString())
   transaction.sender = sender.id
   transaction.reward = reward
   transaction.gasLimit = event.transaction.gasLimit
