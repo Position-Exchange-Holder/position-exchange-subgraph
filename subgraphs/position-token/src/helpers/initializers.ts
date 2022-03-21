@@ -159,9 +159,9 @@ export function initDonate(event: Donate): void {
 }
 
 export function getOrInitBotKeeper(event: BotKeeperChanged): BotKeeper {
-  let botKeeper = BotKeeper.load(DEFAULT_ID)
+  let botKeeper = BotKeeper.load('Botkeeper')
   if (!botKeeper) {
-    botKeeper = new BotKeeper(DEFAULT_ID)
+    botKeeper = new BotKeeper('Botkeeper')
     botKeeper.txHash = event.transaction.hash
     botKeeper.creator = event.transaction.from
     botKeeper.currentAddress = event.params.newKeeper
@@ -177,9 +177,9 @@ export function getOrInitBotKeeper(event: BotKeeperChanged): BotKeeper {
 }
 
 export function getOrInitTreasury(event: TreasuryContractChanged): Treasury {
-  let treasury = Treasury.load(DEFAULT_ID)
+  let treasury = Treasury.load('Treasury')
   if (!treasury) {
-    treasury = new Treasury(DEFAULT_ID)
+    treasury = new Treasury('Treasury')
     treasury.txHash = event.transaction.hash
     treasury.creator = event.transaction.from
     treasury.currentAddress = event.params.newAddress
