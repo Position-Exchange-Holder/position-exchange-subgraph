@@ -1,0 +1,64 @@
+type PositionNftRewardPool @entity {
+  """
+  id: 1
+  """
+  id: ID!
+
+  totalTransactions: BigInt!
+  totalUniqueFarmers: BigInt!
+  totalNftsStaked: BigInt!
+  totalPowerStaked: BigInt!
+  
+  totalTokensLocked: BigDecimal!
+  totalTokensPaidForUser: BigDecimal!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type NftRewardPoolDayData @entity {
+  id: ID!
+  date: Int!
+  dailyTransactions: BigInt!
+  dailyNftsDeposited: BigInt!
+  dailyTokensLocked: BigDecimal!
+  dailyNftsWithdrawn: BigInt!
+  dailyTokensPaidForUser: BigDecimal!
+  dailyNewUsers: BigInt!
+  createdBlockNumber: BigInt!
+}
+
+type User @entity {
+  id: ID!
+
+  transactions: [Transaction!]! @derivedFrom(field: "sender")
+  totalTransactions: BigInt!
+  
+  nftsStaked: [String!]!
+  totalNftsStaked: BigInt!
+  totalPowerStaked: BigInt!
+  
+  totalTokensLocked: BigDecimal!
+  totalRewardEarned: BigDecimal!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+enum Action {
+  Stake
+  Harvest
+  Unstake
+}
+
+type Transaction @entity {
+  id: ID!
+  action: Action!
+  sender: User!
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}

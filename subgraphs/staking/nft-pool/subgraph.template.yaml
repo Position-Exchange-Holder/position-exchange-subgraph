@@ -1,0 +1,65 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{{repository}}}
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PositionNFTRewardPool
+    network: {{network}}
+    source:
+      address: '{{PositionNFTRewardPoolAddress}}'
+      startBlock: {{PositionNFTRewardPoolStartBlock}}
+      abi: PositionNFTRewardPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - PositionNftRewardPool
+        - NftRewardPoolDayData
+        - User
+        - Transaction
+      abis:
+        - name: PositionNFTRewardPool
+          file: ./abis/PositionNFTRewardPool.json
+        - name: PositionNFTFactory
+          file: ./abis/PositionNFTFactory.json
+      eventHandlers:
+        - event: StakedGEGO(indexed address,uint256)
+          handler: handleStakedGEGO
+        - event: WithdrawnGego(indexed address,uint256)
+          handler: handleWithdrawnGego
+        - event: RewardPaid(indexed address,uint256)
+          handler: handleRewardPaid
+      file: ./src/mappings/nftRewardPool.ts
+
+  - kind: ethereum/contract
+    name: PositionNFTRewardPoolV2
+    network: {{network}}
+    source:
+      address: '{{PositionNFTRewardPoolV2ProxyAddress}}'
+      startBlock: {{PositionNFTRewardPoolV2ProxyStartBlock}}
+      abi: PositionNFTRewardPoolV2
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - PositionNftRewardPool
+        - NftRewardPoolDayData
+        - User
+        - Transaction
+      abis:
+        - name: PositionNFTRewardPoolV2
+          file: ./abis/PositionNFTRewardPoolV2.json
+        - name: PositionNFTFactory
+          file: ./abis/PositionNFTFactory.json
+      eventHandlers:
+        - event: StakedGEGO(indexed address,uint256)
+          handler: handleStakedGEGO
+        - event: WithdrawnGego(indexed address,uint256)
+          handler: handleWithdrawnGego
+        - event: RewardPaid(indexed address,uint256)
+          handler: handleRewardPaid
+      file: ./src/mappings/nftRewardPool.ts

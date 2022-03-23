@@ -1,0 +1,17 @@
+{
+  "name": "position-staking-subgraph",
+  "description": "Position Exchange Staking Subgraph",
+  "author": "Community",
+  "keywords": ["position", "exchange", "subgraph", "staking"],
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "prepare:env": "cp ../../../.env.example .env",
+    "prepare:subgraph": "mustache ./config.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:all": "npm run prepare:env && npm run prepare:subgraph",
+    "subgraph:codegen": "rm -rf generated && graph codegen subgraph.yaml --output-dir ./generated",
+    "subgraph:build": "graph build subgraph.yaml",
+    "subgraph:deploy:hosted": "graph deploy $SLUG --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token $ACCESS_TOKEN",
+    "subgraph:deploy": "env-cmd npm run subgraph:deploy:hosted"
+  }
+}
