@@ -29,4 +29,5 @@ export const ADDRESS_LABELS = [
   '0x4982085c9e2f89f2ecb8131eca71afad896e89cb', // 18. MEXC
   '0x5ca42204cdaa70d5c773946e69de942b85ca6706', // 29. PositionToken
   '0xa3772e9b69b5877dde7580d17ae9716d228aafde', // 20. PositionExchangeDeployer
+  '0x6257229fa379afdbb91732091b5de32cdb759845', // 21. GeneralNFTRewardV2
 ]

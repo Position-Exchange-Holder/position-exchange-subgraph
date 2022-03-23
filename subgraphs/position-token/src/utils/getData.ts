@@ -85,6 +85,9 @@ export function getAddressLabel(userAddress: string): string {
   if (userAddress == ADDRESS_LABELS[20]) {
     return 'PositionExchangeDeployer'
   }
+  if (userAddress == ADDRESS_LABELS[21]) {
+    return 'GeneralNFTRewardV2'
+  }
 
   return ''
 }

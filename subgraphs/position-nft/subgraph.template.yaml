@@ -83,3 +83,25 @@ dataSources:
         - event: RewardAdded(uint256)
           handler: handleRewardAdded
       file: ./src/mappings/rewardPool.ts
+
+  # RewardPoolV2
+  - kind: ethereum/contract
+    name: PositionNFTRewardPoolV2
+    network: {{network}}
+    source:
+      address: '{{PositionNFTRewardPoolV2Address}}'
+      startBlock: {{PositionNFTRewardPoolV2StartBlock}}
+      abi: PositionNFTRewardPoolV2
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - RewardPool
+      abis:
+        - name: PositionNFTRewardPoolV2
+          file: ./abis/PositionNFTRewardPoolV2.json
+      eventHandlers:
+        - event: RewardAdded(uint256)
+          handler: handleRewardAdded
+      file: ./src/mappings/rewardPool.ts
