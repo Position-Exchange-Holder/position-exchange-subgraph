@@ -60,6 +60,8 @@ type Transaction @entity {
   id: ID!
   txHash: Bytes!
   action: Action!
+  nftId: String
+  amountRewardToken: BigDecimal
   sender: User!
   gasLimit: BigInt!
   gasPrice: BigInt!

@@ -1,4 +1,4 @@
-import { ethereum } from '@graphprotocol/graph-ts'
+import { BigDecimal, ethereum } from '@graphprotocol/graph-ts'
 import { NftRewardPoolDayData, PositionNftRewardPool, Transaction, User } from '../../generated/schema'
 import { BD_ZERO, ZERO_BI } from '../utils/constant'
 
@@ -60,10 +60,18 @@ export function getOrInitUser(userAddresss: string, event: ethereum.Event): User
   return user
 }
 
-export function initTransaction(sender: User, action: string, event: ethereum.Event): void {
+export function initTransaction(
+  sender: User,
+  action: string,
+  event: ethereum.Event,
+  nftId?: string,
+  amountRewardToken?: BigDecimal
+): void {
   let transaction = new Transaction(action + ':' + event.transaction.hash.toHexString())
   transaction.txHash = event.transaction.hash
   transaction.action = action
+  transaction.nftId = nftId ? nftId : null
+  transaction.amountRewardToken = amountRewardToken ? amountRewardToken : null
   transaction.sender = sender.id
   transaction.gasLimit = event.transaction.gasLimit
   transaction.gasPrice = event.transaction.gasPrice
