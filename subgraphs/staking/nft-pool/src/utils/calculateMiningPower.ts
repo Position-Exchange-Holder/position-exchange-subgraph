@@ -1,10 +1,10 @@
-import { BigInt } from '@graphprotocol/graph-ts'
+import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 
 export function calculateMiningPower(
   grade: number,
   productivity: number,
-  amountToken: number
-): BigInt {
+  amountToken: BigDecimal
+): BigDecimal {
   let miningEfficiency: number
   if (grade == 1) {
     miningEfficiency = 1.1 + 0.1 * productivity / 5000
@@ -22,7 +22,5 @@ export function calculateMiningPower(
     miningEfficiency = 0
   }
 
-  let power = amountToken * miningEfficiency
-
-  return BigInt.fromString(power.toString())
+  return amountToken.times(BigDecimal.fromString(miningEfficiency.toString()))
 }

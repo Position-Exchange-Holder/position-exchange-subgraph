@@ -8,7 +8,7 @@ export function getOrInitPositionNftRewardPool(event: ethereum.Event): PositionN
     positionNftRewardPool = new PositionNftRewardPool('1')
     positionNftRewardPool.totalTransactions = ZERO_BI
     positionNftRewardPool.totalUniqueFarmers = ZERO_BI
-    positionNftRewardPool.totalPowerStaked = ZERO_BI
+    positionNftRewardPool.totalPowerStaked = BD_ZERO
     positionNftRewardPool.totalTokensLocked = BD_ZERO
     positionNftRewardPool.totalTokensPaidForUser = BD_ZERO
     positionNftRewardPool.createdBlockNumber = event.block.number
@@ -48,7 +48,7 @@ export function getOrInitUser(userAddresss: string, event: ethereum.Event): User
     user.totalTransactions = ZERO_BI
     user.nftsStaked = []
     user.totalNftsStaked = ZERO_BI
-    user.totalPowerStaked = ZERO_BI
+    user.totalPowerStaked = BD_ZERO
     user.totalTokensLocked = BD_ZERO
     user.totalRewardEarned = BD_ZERO
     user.createdBlockNumber = event.block.number

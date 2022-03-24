@@ -1,4 +1,4 @@
-import { BigDecimal, BigInt, log } from '@graphprotocol/graph-ts'
+import { BigDecimal, log } from '@graphprotocol/graph-ts'
 import { RewardPaid, StakedGEGO, WithdrawnGego } from '../../generated/PositionNFTRewardPool/PositionNFTRewardPool'
 import { getOrInitNftRewardPoolDayData, getOrInitPositionNftRewardPool, getOrInitUser, initTransaction } from '../helpers/initializers'
 import { removeElementFromArray } from '../utils/array'
@@ -19,7 +19,7 @@ export function handleStakedGEGO(event: StakedGEGO): void {
   let nftPower = calculateMiningPower(
     gego.grade.toI32(),
     gego.productivity.toI32(),
-    BigInt.fromString(gego.amount.div(BD_1E18).toString()).toI32()
+    gego.amount.div(BD_1E18)
   )
 
   // User
@@ -43,6 +43,7 @@ export function handleStakedGEGO(event: StakedGEGO): void {
     positionNftRewardPool.totalUniqueFarmers = positionNftRewardPool.totalUniqueFarmers.plus(ONE_BI)
   }
   positionNftRewardPool.totalNftsStaked = positionNftRewardPool.totalNftsStaked.plus(ONE_BI)
+  positionNftRewardPool.totalPowerStaked = positionNftRewardPool.totalPowerStaked.plus(nftPower)
   positionNftRewardPool.totalTokensLocked = positionNftRewardPool.totalTokensLocked.plus(gego.amount)
   positionNftRewardPool.updatedTimestamp = event.block.timestamp
   positionNftRewardPool.save()
@@ -74,7 +75,7 @@ export function handleWithdrawnGego(event: WithdrawnGego): void {
   let nftPower = calculateMiningPower(
     gego.grade.toI32(),
     gego.productivity.toI32(),
-    BigInt.fromString(gego.amount.div(BD_1E18).toString()).toI32()
+    gego.amount.div(BD_1E18)
   )
 
   // User

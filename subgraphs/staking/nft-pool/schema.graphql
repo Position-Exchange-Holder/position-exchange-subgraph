@@ -7,7 +7,7 @@ type PositionNftRewardPool @entity {
   totalTransactions: BigInt!
   totalUniqueFarmers: BigInt!
   totalNftsStaked: BigInt!
-  totalPowerStaked: BigInt!
+  totalPowerStaked: BigDecimal!
   
   totalTokensLocked: BigDecimal!
   totalTokensPaidForUser: BigDecimal!
@@ -37,7 +37,7 @@ type User @entity {
   
   nftsStaked: [String!]!
   totalNftsStaked: BigInt!
-  totalPowerStaked: BigInt!
+  totalPowerStaked: BigDecimal!
   
   totalTokensLocked: BigDecimal!
   totalRewardEarned: BigDecimal!
