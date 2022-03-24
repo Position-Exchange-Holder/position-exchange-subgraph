@@ -61,7 +61,8 @@ export function getOrInitUser(userAddresss: string, event: ethereum.Event): User
 }
 
 export function initTransaction(sender: User, action: string, event: ethereum.Event): void {
-  let transaction = new Transaction(event.transaction.hash.toHexString() + ':' + action)
+  let transaction = new Transaction(action + ':' + event.transaction.hash.toHexString())
+  transaction.txHash = event.transaction.hash
   transaction.action = action
   transaction.sender = sender.id
   transaction.gasLimit = event.transaction.gasLimit

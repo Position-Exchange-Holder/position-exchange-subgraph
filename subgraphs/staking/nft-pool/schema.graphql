@@ -54,7 +54,11 @@ enum Action {
 }
 
 type Transaction @entity {
+  """
+  id: action + txHash
+  """
   id: ID!
+  txHash: Bytes!
   action: Action!
   sender: User!
   gasLimit: BigInt!
