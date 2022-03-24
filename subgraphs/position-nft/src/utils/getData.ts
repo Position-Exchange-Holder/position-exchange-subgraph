@@ -1,4 +1,4 @@
-import { BigInt, dataSource } from '@graphprotocol/graph-ts'
+import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { PositionNFTFactory } from '../../generated/PositionNFTFactory/PositionNFTFactory'
 import { 
   NFT_FACTORY_ADDRESS,
@@ -50,7 +50,7 @@ export function getContractName(contractAddress: string): string {
 }
 
 export function getGradeOfNft(nftId: string): BigInt {
-  let factory = PositionNFTFactory.bind(dataSource.address())
+  let factory = PositionNFTFactory.bind(Address.fromString(NFT_FACTORY_ADDRESS))
   let nft = factory.try_getGego(BigInt.fromString(nftId))
   if (!nft.reverted) {
     return nft.value.value0
