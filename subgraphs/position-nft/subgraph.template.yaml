@@ -26,6 +26,8 @@ dataSources:
       abis:
         - name: PositionNFT
           file: ./abis/PositionNFT.json
+        - name: PositionNFTFactory
+          file: ./abis/PositionNFTFactory.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
