@@ -1,0 +1,10 @@
+{
+  "network": "bsc",
+  "description": "Position Exchange Staking Subgraph",
+  "repository": "https://github.com/Position-Exchange-Holder/position-exchange-subgraph",
+  "apiVersion": "0.0.5",
+  "PosiStakingManagerAddress": "0x0c54b0b7d61de871db47c3ad3f69feb0f2c8db0b",
+  "PosiStakingManagerStartBlock": 9516486,
+  "PosiSmartChefFactoryAddress": "0x7663bba335a22edd8da8f5c77fdaa43a5e4fea95",
+  "PosiSmartChefFactoryStartBlock": 16303878
+}

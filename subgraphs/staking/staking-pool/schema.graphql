@@ -1,0 +1,79 @@
+type PositionStakingManager @entity {
+  """
+  id: 1
+  """
+  id: ID!
+  totalTransactions: BigInt!
+  totalTokensLocked: BigDecimal!
+  totalUniqueFarmers: BigInt!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type Pool @entity {
+  """
+  pid
+  """
+  id: ID!
+  lpToken: Bytes!
+  totalTransactions: BigInt!
+  totalTokensLocked: BigDecimal!
+  totalUniqueFarmers: BigInt!
+
+  users: [UserPoolData!]! @derivedFrom(field: "pool")
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type User @entity {
+  id: ID!
+
+  totalTransactions: BigInt!
+  transactions: [Transaction!]! @derivedFrom(field: "sender")
+
+  pools: [UserPoolData!]! @derivedFrom(field: "user")
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type UserPoolData @entity {
+  """
+  id: userAdress + ":" + pid
+  """
+  id: ID!
+  user: User!
+  pool: Pool!
+
+  amountTokensStaked: BigDecimal!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+enum Action {
+  Deposit
+  Withdraw
+  EmergencyWithdraw
+}
+
+type Transaction @entity {
+  """
+  id: action + txHash
+  """
+  id: ID!
+  txHash: Bytes!
+  action: Action!
+  amountToken: BigDecimal!
+  sender: User!
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
