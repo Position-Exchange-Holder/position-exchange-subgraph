@@ -1,9 +1,12 @@
+import { BigInt, dataSource } from '@graphprotocol/graph-ts'
+import { PositionNFTFactory } from '../../generated/PositionNFTFactory/PositionNFTFactory'
 import { 
   NFT_FACTORY_ADDRESS,
   NFT_MARKETPLACE_PROXY_ADDRESS,
   NFT_REWARD_POOL_ADDRESS,
   NFT_REWARD_POOL_V2_ADDRESS,
-  ZERO_ADDRESS
+  ZERO_ADDRESS,
+  ZERO_BI
 } from './constant'
 
 export function getNftTransferAction(from: string, to: string): string {
@@ -44,4 +47,14 @@ export function getContractName(contractAddress: string): string {
   }
 
   return ''
+}
+
+export function getGradeOfNft(nftId: string): BigInt {
+  let factory = PositionNFTFactory.bind(dataSource.address())
+  let nft = factory.try_getGego(BigInt.fromString(nftId))
+  if (!nft.reverted) {
+    return nft.value.value0
+  }
+
+  return ZERO_BI
 }

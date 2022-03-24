@@ -2,7 +2,7 @@ import { log } from '@graphprotocol/graph-ts'
 import { ApprovalForAll, Transfer } from '../../generated/PositionNFT/PositionNFT'
 import { getOrInitNft, getOrInitContract, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initTransaction } from '../helpers/initializers'
 import { ONE_BI, ZERO_BI } from '../utils/constant'
-import { getContractName, getNftTransferAction } from '../utils/getData'
+import { getContractName, getGradeOfNft, getNftTransferAction } from '../utils/getData'
 
 export function handleTransfer(event: Transfer): void {
   let nft = getOrInitNft(event.params.tokenId.toString(), event)
@@ -58,10 +58,11 @@ export function handleTransfer(event: Transfer): void {
   nftDayData.dailyTransactions = nftDayData.dailyTransactions.plus(ONE_BI)
 
   // Create new transaction
+  let gradeOfNft = action == 'Mint' ? getGradeOfNft(nft.id) : nft.grade
   initTransaction(
     event.transaction.hash.toHex(),
     action,
-    nft.grade,
+    gradeOfNft,
     nft,
     sender,
     from,
