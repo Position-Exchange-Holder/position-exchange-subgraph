@@ -59,7 +59,7 @@ export function handleStakedGEGO(event: StakedGEGO): void {
   nftRewardPoolDayData.save()
 
   // Transaction
-  initTransaction(user, ACTION_STAKE, event, nftId)
+  initTransaction(user, ACTION_STAKE, event, nftId, null)
 }
 
 // Unstake
@@ -108,7 +108,7 @@ export function handleWithdrawnGego(event: WithdrawnGego): void {
   nftRewardPoolDayData.save()
 
   // Transaction
-  initTransaction(user, ACTION_UNSTAKE, event, nftId)
+  initTransaction(user, ACTION_UNSTAKE, event, nftId, null)
 }
 
 // Harvest
@@ -130,5 +130,5 @@ export function handleRewardPaid(event: RewardPaid): void {
   nftRewardPoolDayData.dailyTokensPaidForUser = nftRewardPoolDayData.dailyTokensPaidForUser.plus(amountToken)
   nftRewardPoolDayData.save()
 
-  initTransaction(user, ACTION_HAVEST, event, undefined, amountToken)
+  initTransaction(user, ACTION_HAVEST, event, null, amountToken)
 }

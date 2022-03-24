@@ -64,14 +64,14 @@ export function initTransaction(
   sender: User,
   action: string,
   event: ethereum.Event,
-  nftId?: string,
-  amountRewardToken?: BigDecimal
+  nftId: string | null,
+  amountRewardToken: BigDecimal | null
 ): void {
   let transaction = new Transaction(action + ':' + event.transaction.hash.toHexString())
   transaction.txHash = event.transaction.hash
   transaction.action = action
-  transaction.nftId = nftId ? nftId : null
-  transaction.amountRewardToken = amountRewardToken ? amountRewardToken : null
+  transaction.nftId = nftId
+  transaction.amountRewardToken = amountRewardToken
   transaction.sender = sender.id
   transaction.gasLimit = event.transaction.gasLimit
   transaction.gasPrice = event.transaction.gasPrice
