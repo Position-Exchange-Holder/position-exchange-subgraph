@@ -39,3 +39,18 @@ Bond03
 ### Public Sale
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-public-sale
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-public-sale
+
+### Staking
+NFT Reward Pool
+- HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/nft-reward-pool
+- WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/nft-reward-pool
+
+Staking Pool
+- HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-staking-pool
+- WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-staking-pool
+
+### Marketplace
+
+### Governance
+
+### Competition
