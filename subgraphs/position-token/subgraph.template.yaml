@@ -39,8 +39,8 @@ dataSources:
           handler: handleBotKeeperChanged
         - event: TreasuryContractChanged(indexed address,indexed address)
           handler: handleTreasuryContractChanged
-      blockHandlers:
-        - handler: handleBlock
+      # blockHandlers:
+      #   - handler: handleBlock
       file: ./src/mappings/token.ts
 templates:
   - kind: ethereum/contract

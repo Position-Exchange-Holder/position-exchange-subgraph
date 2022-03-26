@@ -108,10 +108,10 @@ export function handleTreasuryContractChanged(event: TreasuryContractChanged): v
   treasury.save()
 }
 
-export function handleBlock(block: ethereum.Block): void {
-  let positionTokenPrice = getOrInitPositionTokenPriceAndVolume(block.number)
-  positionTokenPrice.priceInBUSD = getPosiPriceInBUSD()
-  positionTokenPrice.priceInBNB = getPosiPriceInBNB()
-  positionTokenPrice.updatedBlockNumber = block.number
-  positionTokenPrice.save()
-}
+// export function handleBlock(block: ethereum.Block): void {
+//   let positionTokenPrice = getOrInitPositionTokenPriceAndVolume(block.number)
+//   positionTokenPrice.priceInBUSD = getPosiPriceInBUSD()
+//   positionTokenPrice.priceInBNB = getPosiPriceInBNB()
+//   positionTokenPrice.updatedBlockNumber = block.number
+//   positionTokenPrice.save()
+// }
