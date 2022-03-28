@@ -1,19 +1,19 @@
 # Position Exchange Subgraphs
 
 ## Subgraphs
-### Position Token
+### [Position Token](./subgraphs/position-token/)
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-token
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-token
 
-### Position NFT
+### [Position NFT](./subgraphs/position-nft/)
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-nft
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-nft
 
-### Referral
+### [Referral](./subgraphs/referral/)
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-referral
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-referral
 
-### Vault
+### [Vault](./subgraphs/vault/)
 BUSD
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-busd-vault
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-busd-vault
@@ -22,7 +22,7 @@ BNB
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-bnb-vault
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-bnb-vault
 
-### Bond
+### [Bond](./subgraphs/bond/)
 Bond01
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-bond-01
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-bond-01
@@ -36,11 +36,11 @@ Bond03
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-bond-03
 
 
-### Public Sale
+### [Public Sale](./subgraphs/public-sale/)
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-public-sale
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-public-sale
 
-### Staking
+### [Staking](./subgraphs/staking/)
 NFT Reward Pool
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/nft-reward-pool
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/nft-reward-pool
@@ -49,8 +49,8 @@ Staking Pool
 - HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-staking-pool
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-staking-pool
 
-### Marketplace
+### Marketplace 👀
 
-### Governance
+### Governance 👀
 
-### Competition
+### Competition 👀
