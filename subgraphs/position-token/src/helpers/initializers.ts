@@ -81,6 +81,9 @@ export function getOrInitPositionTokenPriceAndVolume(blockNumber: BigInt): Posit
     tokenPriceAndVolume.save()
   }
 
+  tokenPriceAndVolume.priceInBUSD = getPosiPriceInBUSD()
+  tokenPriceAndVolume.priceInBNB = getPosiPriceInBNB()
+
   return tokenPriceAndVolume
 }
 
