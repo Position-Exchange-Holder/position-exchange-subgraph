@@ -18,6 +18,7 @@ export function handleGegoAdded(event: GegoAdded): void {
   nft.nftType = event.params.nftType
   nft.author = event.params.author.toHexString()
   nft.erc20 = event.params.erc20
+  nft.createdTime = event.block.timestamp
   nft.blockNum = event.params.blockNum
   nft.lockedDays = event.params.lockedDays
   
