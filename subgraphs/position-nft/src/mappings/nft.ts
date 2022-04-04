@@ -1,13 +1,12 @@
 import { log } from '@graphprotocol/graph-ts'
 import { ApprovalForAll, Transfer } from '../../generated/PositionNFT/PositionNFT'
 import { getOrInitNft, getOrInitContract, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initTransaction } from '../helpers/initializers'
-import { ONE_BI, ZERO_BI } from '../utils/constant'
+import { ONE_BI } from '../utils/constant'
 import { getContractName, getGradeOfNft, getNftTransferAction } from '../utils/getData'
 
 export function handleTransfer(event: Transfer): void {
   let nft = getOrInitNft(event.params.tokenId.toString(), event)
 
-  let sender = getOrInitOwner(event.transaction.from.toHexString(), event)
   let from = getOrInitOwner(event.params.from.toHexString(), event)
   let to = getOrInitOwner(event.params.to.toHexString(), event)
   let nftStatistics = getOrInitNftStatistics(event)
@@ -17,7 +16,6 @@ export function handleTransfer(event: Transfer): void {
 
   // Mint
   if (action == 'Mint') {
-    sender.totalNftsMinted = sender.totalNftsMinted.plus(ONE_BI)
     nftStatistics.totalNftsMinted = nftStatistics.totalNftsMinted.plus(ONE_BI)
     nftDayData.dailyNftMinted = nftDayData.dailyNftMinted.plus(ONE_BI)
   }
@@ -43,7 +41,7 @@ export function handleTransfer(event: Transfer): void {
   }
 
   // Normal transfer
-  from.totalNfts = action == 'Mint' ? ZERO_BI : from.totalNfts.minus(ONE_BI)
+  from.totalNfts = action == 'Mint' ? from.totalNfts : from.totalNfts.minus(ONE_BI)
   from.totalTransactions = from.totalTransactions.plus(ONE_BI)
   to.totalNfts = to.totalNfts.plus(ONE_BI)
   to.totalTransactions = to.totalTransactions.plus(ONE_BI)
@@ -57,6 +55,19 @@ export function handleTransfer(event: Transfer): void {
   nftStatistics.updatedTimestamp = event.block.timestamp
   nftDayData.dailyTransactions = nftDayData.dailyTransactions.plus(ONE_BI)
 
+  // Save
+  from.save()
+  to.save()
+  nft.save()
+  nftStatistics.save()
+  nftDayData.save()
+  
+  let sender = getOrInitOwner(event.transaction.from.toHexString(), event)
+  if (action == 'Mint') {
+    sender.totalNftsMinted = sender.totalNftsMinted.plus(ONE_BI)
+    sender.save()
+  }
+  
   // Create new transaction
   let gradeOfNft = action == 'Mint' ? getGradeOfNft(nft.id) : nft.grade
   initTransaction(
@@ -69,14 +80,6 @@ export function handleTransfer(event: Transfer): void {
     to,
     event
   )
-
-  // Save
-  sender.save()
-  from.save()
-  to.save()
-  nft.save()
-  nftStatistics.save()
-  nftDayData.save()
   
   log.info('[{}] {} transfer {} to {}', [
     action,

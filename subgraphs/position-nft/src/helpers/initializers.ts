@@ -6,7 +6,7 @@ import { ONE_BI, ZERO_BI } from '../utils/constant'
 export function initNft(tokenId: string, event: ethereum.Event): PositionNFT {
   let nft = new PositionNFT(tokenId)
   
-  nft.totalTransactions = ONE_BI
+  nft.totalTransactions = ZERO_BI
   nft.totalOwners = ONE_BI
   nft.burned = false
   nft.updatedTimestamp = event.block.timestamp
@@ -72,7 +72,8 @@ export function initTransaction(
   to: Owner,
   event: ethereum.Event
 ): void {
-  let transaction = new Transaction(txHash)
+  let transaction = new Transaction(nft.id + ':' + txHash)
+  transaction.txHash = event.transaction.hash
   transaction.action = action
   transaction.grade = grade
   transaction.nft = nft.id

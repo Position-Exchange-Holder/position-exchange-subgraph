@@ -65,7 +65,11 @@ type Contract @entity {
 }
 
 type Transaction @entity {
+  """
+  id: nftId : txHash
+  """
   id: ID!
+  txHash: Bytes!
 
   action: Action!
   grade: BigInt!

@@ -94,6 +94,7 @@ export function getOrInitPositionTokenDayData(event: ethereum.Event): PositionTo
   let positionTokenDayData = PositionTokenDayData.load(dayID)
   if (!positionTokenDayData) {
     positionTokenDayData = new PositionTokenDayData(dayID)
+    positionTokenDayData.date = timestamp
     // Get prices
     positionTokenDayData.priceInBUSD = getPosiPriceInBUSD()
     positionTokenDayData.priceInBNB = getPosiPriceInBNB()
