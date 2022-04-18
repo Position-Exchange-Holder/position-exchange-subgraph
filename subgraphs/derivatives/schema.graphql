@@ -1,0 +1,63 @@
+enum Side { LONG, SHORT }
+
+type PositionCounter @entity {
+  "id: 1"
+  id: ID!
+  totalAvailablePositions: BigInt!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlockNumber: BigInt!
+}
+
+type Position @entity {
+  # MarketID + TraderID
+  id: ID!
+  market: Market!
+  trader: Trader!
+  transactions: [Transaction!]! @derivedFrom(field: "position")
+  quantity: BigInt!
+  leverage: BigInt!
+  side: Side!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type Trader @entity {
+  id: ID!
+  positions: [Position!]! @derivedFrom(field: "trader")
+}
+
+type Transaction @entity {
+  id: ID!
+  position: Position!
+  entryPrice: BigInt!
+  quantity: BigInt!
+  leverage: BigInt!
+  side: Side!
+  blockNumber: BigInt!
+  createdAt: BigInt!
+}
+
+type Market @entity {
+  id: ID!
+  position: [Position!]! @derivedFrom(field: "market")
+}
+
+type MarketDayData @entity {
+  id: ID!
+  date: Int!
+  volume: BigInt!
+  blockNumber: BigInt!
+}
+
+type Liquidation @entity {
+  # BlockNumber + PositionID
+  id: ID!
+  txHash: Bytes!
+  position: String!
+  liquidator: Bytes!
+  trader: Bytes!
+  market: Bytes!
+  blockNumber: BigInt!
+  createdAt: BigInt!
+}

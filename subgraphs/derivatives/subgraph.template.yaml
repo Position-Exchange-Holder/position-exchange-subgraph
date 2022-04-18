@@ -1,0 +1,81 @@
+specVersion: 0.0.2
+description: {{description}}
+repository: {{{repository}}}
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PositionHouse
+    network: {{network}}
+    source:
+      address: '{{PositionHouseProxyAddress}}'
+      startBlock: {{PositionHouseProxyStartBlock}}
+      abi: PositionHouse
+    mapping:
+      kind: ethereum/events
+      apiVersion: {{apiVersion}}
+      language: wasm/assemblyscript
+      entities:
+        - PositionCounter
+        - Position
+        - Trader
+        - Transaction
+        - Market
+        - MarketDayData
+        - Liquidation
+      abis:
+        - name: PositionHouse
+          file: ./abis/PositionHouse.json
+      eventHandlers:
+        - event: OpenMarket(address,int256,uint16,uint256,address)
+          handler: handleOpenMarket
+        - event: OpenLimit(uint64,address,int256,uint256,uint128,address)
+          handler: handleOpenLimit
+        - event: CancelLimitOrder(address,address,uint128,uint64)
+          handler: handleCancelLimitOrder
+        - event: FullyLiquidated(address,address)
+          handler: handleFullyLiquidated
+      file: ./src/mappings/positionHouse.ts
+
+  # - kind: ethereum/contract
+  #   name: PositionManager
+  #   network: {{network}}
+  #   source:
+  #     address: '{{...}}'
+  #     startBlock: {{...}}
+  #     abi: PositionManager
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: {{apiVersion}}
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Position
+  #     abis:
+  #       - name: PositionManager
+  #         file: ./abis/PositionManager.json
+  #     eventHandlers:
+  #       - event: MarketFilled(boolean,uint256,uint128,uint256,uint128)
+  #         handler: handleMarketFilled
+  #       - event: LimitOrderCreated(uint64,uint128,uint128,boolean)
+  #         handler: handleLimitOrderCreated
+  #       - event: LimitOrderCancelled(boolean,uint64,uint128,uint256)
+  #         handler: handleLimitOrderCancelled
+  #       - event: UpdateMaxFindingWordsIndex(uint128)
+  #         handler: handleUpdateMaxFindingWordsIndex
+  #       - event: UpdateBasisPoint(uint256)
+  #         handler: handleUpdateBasisPoint
+  #       - event: UpdateTollRatio(uint256)
+  #         handler: handleUpdateTollRatio
+  #       - event: UpdateSpotPriceTwapInterval(uint256)
+  #         handler: handleUpdateSpotPriceTwapInterval
+  #       - event: ReserveSnapshotted(uint128,uint256)
+  #         handler: handleReserveSnapshotted
+  #       - event: FundingRateUpdated(int256,uint256)
+  #         handler: handleFundingRateUpdated
+  #       - event: LimitOrderUpdated(uint64,uint128,uint256)
+  #         handler: handleLimitOrderUpdated
+  #       - event: LeverageUpdated(uint128,uint128)
+  #         handler: handleLeverageUpdated
+  #       - event: MaxMarketMakerSlippageUpdated(uint32,uint32)
+  #         handler: handleMaxMarketMakerSlippageUpdated
+  #     file: ./src/mappings/positionManager.ts
