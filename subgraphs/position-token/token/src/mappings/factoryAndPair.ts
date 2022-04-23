@@ -23,10 +23,12 @@ export function handleSwap(event: Swap): void {
     let busdIn = event.params.amount1In
     let busdOut = event.params.amount1Out
     let volumeInBUSD = busdIn.plus(busdOut).toBigDecimal()
+    let realizedPnl = calculateRealizedPnl(posiIn, volumeInBUSD)
     
     let sender = getOrInitUser(event.transaction.from.toHex(), event)
     increaseTokenBuyOrSellOfSender(sender, posiIn, posiOut)
     sender.totalVolumeInBUSD = sender.totalVolumeInBUSD.plus(volumeInBUSD)
+    sender.realizedPnl = sender.realizedPnl.plus(realizedPnl)
     sender.updatedTimestamp = event.block.timestamp
     sender.save()
     
@@ -47,7 +49,6 @@ export function handleSwap(event: Swap): void {
       positionTokenPriceAndVolume.priceInBNB
     )
 
-    let realizedPnl = calculateRealizedPnl(posiIn, volumeInBUSD)
     updateUserRealizedPnlDayData(
       sender,
       realizedPnl,
@@ -63,10 +64,12 @@ export function handleSwap(event: Swap): void {
     let bnbIn = event.params.amount1In
     let bnbOut = event.params.amount1Out
     let volumeInBUSD = bnbIn.plus(bnbOut).toBigDecimal().times(getBNBPriceInBUSD())
+    let realizedPnl = calculateRealizedPnl(posiIn, volumeInBUSD)
 
     let sender = getOrInitUser(event.transaction.from.toHex(), event)
     increaseTokenBuyOrSellOfSender(sender, posiIn, posiOut)
     sender.totalVolumeInBUSD = sender.totalVolumeInBUSD.plus(volumeInBUSD)
+    sender.realizedPnl = sender.realizedPnl.plus(realizedPnl)
     sender.updatedTimestamp = event.block.timestamp
     sender.save()
 
@@ -87,7 +90,6 @@ export function handleSwap(event: Swap): void {
       positionTokenPriceAndVolume.priceInBNB
     )
 
-    let realizedPnl = calculateRealizedPnl(posiIn, volumeInBUSD)
     updateUserRealizedPnlDayData(
       sender,
       realizedPnl,
