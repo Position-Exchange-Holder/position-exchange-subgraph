@@ -57,7 +57,6 @@ type PositionTokenDayData @entity {
   date: Int!
 
   # Transfer
-  dailyActiveAddresses: BigInt!
   dailyNewUniqueAddresses: BigInt!
   dailyTransactions: BigInt!
   dailyRFIRedistributed: BigDecimal!
@@ -79,6 +78,9 @@ type User @entity {
 
   balance: BigInt!
 
+  realizedPnl: BigDecimal!
+  realizedPnlDayData: [UserRealizedPnlDayData!]! @derivedFrom(field: "user")
+
   totalTokensBuy: BigInt!
   totalTokensSell: BigInt!
   totalVolumeInBUSD: BigDecimal!
@@ -90,6 +92,19 @@ type User @entity {
   createdBlockNumber: BigInt!
   createdTimestamp: BigInt!
   updatedTimestamp: BigInt!
+}
+
+type UserRealizedPnlDayData @entity {
+  """
+  id: userAddress:date
+  """
+  id: ID!
+  date: Int!
+  user: User!
+  realizedPnl: BigDecimal! # By BUSD
+  volumeInBUSD: BigDecimal!
+  transactions: BigInt!
+  createdBlockNumber: BigInt!
 }
 
 type Transaction @entity {

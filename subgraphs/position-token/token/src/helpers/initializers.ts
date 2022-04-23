@@ -1,6 +1,27 @@
-import { ethereum, BigInt, Address, log, BigDecimal } from '@graphprotocol/graph-ts'
-import { BotKeeperChanged, Donate, TreasuryContractChanged } from '../../generated/PositionToken/PositionToken'
-import { BotKeeper, DonateRecord, PositionToken, Treasury, User, Transaction, PositionTokenDayData, PositionTokenPriceAndVolume, Market } from '../../generated/schema'
+import {
+  ethereum,
+  BigInt,
+  Address,
+  log,
+  BigDecimal
+} from '@graphprotocol/graph-ts'
+import {
+  BotKeeperChanged,
+  Donate,
+  TreasuryContractChanged
+} from '../../generated/PositionToken/PositionToken'
+import {
+  BotKeeper,
+  DonateRecord,
+  PositionToken,
+  Treasury,
+  User,
+  UserRealizedPnlDayData,
+  Transaction,
+  PositionTokenDayData,
+  PositionTokenPriceAndVolume,
+  Market
+} from '../../generated/schema'
 import { Pair as PairTemplate } from '../../generated/templates'
 import { BD_ZERO, DEFAULT_ID, TOKEN_MAX_SUPPLY, ZERO_BI } from '../utils/constant'
 import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from '../helpers/fetchTokenInfo'
@@ -8,7 +29,10 @@ import { getAddressLabel } from '../utils/getData'
 import { getPosiPriceInBNB, getPosiPriceInBUSD } from './getPrices'
 import { LP_PAIRS } from '../utils/addresses'
 
-export function getOrInitMarket(marketAddress: string, event: ethereum.Event): Market {
+export function getOrInitMarket(
+  marketAddress: string,
+  event: ethereum.Event
+): Market {
   let market = Market.load(marketAddress)
   if (!market) {
     market = new Market(marketAddress)
@@ -24,7 +48,9 @@ export function getOrInitMarket(marketAddress: string, event: ethereum.Event): M
   return market
 }
 
-export function getOrInitPositionToken(event: ethereum.Event): PositionToken {
+export function getOrInitPositionToken(
+  event: ethereum.Event
+): PositionToken {
   let positionToken = PositionToken.load(DEFAULT_ID)
   if (!positionToken) {
     positionToken = new PositionToken(DEFAULT_ID)
@@ -35,7 +61,8 @@ export function getOrInitPositionToken(event: ethereum.Event): PositionToken {
     positionToken.name = tokenName
     positionToken.symbol = tokenSymbol
     positionToken.decimals = tokenDecimals
-    positionToken.maxSupply = BigDecimal.fromString(TOKEN_MAX_SUPPLY.toString()).times(BigDecimal.fromString('1e18'))
+    positionToken.maxSupply = BigDecimal.fromString(TOKEN_MAX_SUPPLY.toString())
+      .times(BigDecimal.fromString('1e18'))
 
     positionToken.totalMinted = BD_ZERO
     positionToken.totalBurned = BD_ZERO
@@ -70,7 +97,9 @@ export function getOrInitPositionToken(event: ethereum.Event): PositionToken {
   return positionToken
 }
 
-export function getOrInitPositionTokenPriceAndVolume(blockNumber: BigInt): PositionTokenPriceAndVolume {
+export function getOrInitPositionTokenPriceAndVolume(
+  blockNumber: BigInt
+): PositionTokenPriceAndVolume {
   let tokenPriceAndVolume = PositionTokenPriceAndVolume.load(DEFAULT_ID)
   if (!tokenPriceAndVolume) {
     tokenPriceAndVolume = new PositionTokenPriceAndVolume(DEFAULT_ID)
@@ -87,7 +116,9 @@ export function getOrInitPositionTokenPriceAndVolume(blockNumber: BigInt): Posit
   return tokenPriceAndVolume
 }
 
-export function getOrInitPositionTokenDayData(event: ethereum.Event): PositionTokenDayData {
+export function getOrInitPositionTokenDayData(
+  event: ethereum.Event
+): PositionTokenDayData {
   let timestamp = event.block.timestamp.toI32()
   let dayID = (timestamp / 86400).toString()
   
@@ -99,7 +130,6 @@ export function getOrInitPositionTokenDayData(event: ethereum.Event): PositionTo
     positionTokenDayData.priceInBUSD = getPosiPriceInBUSD()
     positionTokenDayData.priceInBNB = getPosiPriceInBNB()
 
-    positionTokenDayData.dailyActiveAddresses = ZERO_BI
     positionTokenDayData.dailyNewUniqueAddresses = ZERO_BI
     positionTokenDayData.dailyTransactions = ZERO_BI
     positionTokenDayData.dailyRFIRedistributed = BD_ZERO
@@ -112,7 +142,33 @@ export function getOrInitPositionTokenDayData(event: ethereum.Event): PositionTo
   return positionTokenDayData
 }
 
-export function getOrInitUser(userAddress: string, event: ethereum.Event): User {
+export function getOrInitUserRealizedPnlDayData(
+  user: User,
+  event: ethereum.Event
+): UserRealizedPnlDayData {
+  let timestamp = event.block.timestamp.toI32()
+  let id = user.id + ':' + (timestamp / 86400).toString()
+
+  let userRealizedPnlDayData = UserRealizedPnlDayData.load(id)
+  if (!userRealizedPnlDayData) {
+    userRealizedPnlDayData = new UserRealizedPnlDayData(id)
+    userRealizedPnlDayData.date = timestamp
+    userRealizedPnlDayData.user = user.id
+    userRealizedPnlDayData.realizedPnl = BD_ZERO
+    userRealizedPnlDayData.transactions = ZERO_BI
+    userRealizedPnlDayData.volumeInBUSD = BD_ZERO
+    userRealizedPnlDayData.createdBlockNumber = event.block.number
+
+    userRealizedPnlDayData.save()
+  }
+
+  return userRealizedPnlDayData
+}
+
+export function getOrInitUser(
+  userAddress: string,
+  event: ethereum.Event
+): User {
   let user = User.load(userAddress)
   if (!user) {
     user = new User(userAddress)
@@ -162,7 +218,9 @@ export function initDonate(event: Donate): void {
   donateRecord.save()
 }
 
-export function getOrInitBotKeeper(event: BotKeeperChanged): BotKeeper {
+export function getOrInitBotKeeper(
+  event: BotKeeperChanged
+): BotKeeper {
   let botKeeper = BotKeeper.load('Botkeeper')
   if (!botKeeper) {
     botKeeper = new BotKeeper('Botkeeper')
@@ -180,7 +238,9 @@ export function getOrInitBotKeeper(event: BotKeeperChanged): BotKeeper {
   return botKeeper
 }
 
-export function getOrInitTreasury(event: TreasuryContractChanged): Treasury {
+export function getOrInitTreasury(
+  event: TreasuryContractChanged
+): Treasury {
   let treasury = Treasury.load('Treasury')
   if (!treasury) {
     treasury = new Treasury('Treasury')

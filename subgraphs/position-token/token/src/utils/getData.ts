@@ -1,4 +1,8 @@
-import { ADDRESS_LABELS, ZERO_ADDRESS } from './addresses'
+import {
+  ADDRESS_LABELS,
+  DEAD_ADDRESS,
+  ZERO_ADDRESS
+} from './addresses'
 import {
   ACTION_BURN,
   ACTION_MINT,
@@ -13,7 +17,7 @@ export function getTransferAction(from: string, to: string): string {
     return ACTION_MINT
   }
 
-  if (to == ZERO_ADDRESS) {
+  if (to == ZERO_ADDRESS || to == DEAD_ADDRESS) {
     return ACTION_BURN
   }
 

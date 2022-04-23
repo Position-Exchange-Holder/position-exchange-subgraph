@@ -39,8 +39,6 @@ dataSources:
           handler: handleBotKeeperChanged
         - event: TreasuryContractChanged(indexed address,indexed address)
           handler: handleTreasuryContractChanged
-      # blockHandlers:
-      #   - handler: handleBlock
       file: ./src/mappings/token.ts
 templates:
   - kind: ethereum/contract
@@ -57,6 +55,7 @@ templates:
         - PositionTokenPriceAndVolume
         - PositionTokenDayData
         - User
+        - UserRealizedPnlDayData
       abis:
         - name: Pair
           file: ./abis/Pair.json

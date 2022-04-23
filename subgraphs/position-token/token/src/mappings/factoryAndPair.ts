@@ -1,11 +1,19 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { Swap } from '../../generated/templates/Pair/Pair'
 import { User } from '../../generated/schema'
-import { getOrInitMarket, getOrInitPositionTokenPriceAndVolume, getOrInitUser } from '../helpers/initializers'
+import {
+  getOrInitMarket,
+  getOrInitPositionTokenPriceAndVolume,
+  getOrInitUser
+} from '../helpers/initializers'
 import { LP_PAIRS } from '../utils/addresses'
 import { ONE_BI, ZERO_BI } from '../utils/constant'
-import { updatePositionTokenDayDataPriceAndVolume } from '../helpers/dailyUpdates'
+import {
+  updatePositionTokenDayDataPriceAndVolume,
+  updateUserRealizedPnlDayData
+} from '../helpers/dailyUpdates'
 import { getBNBPriceInBUSD } from '../helpers/getPrices'
+import { calculateRealizedPnl } from '../helpers/calculateRealizedPnl'
 
 export function handleSwap(event: Swap): void {
   // Trade POSI/BUSD
@@ -37,6 +45,14 @@ export function handleSwap(event: Swap): void {
       volumeInBUSD,
       positionTokenPriceAndVolume.priceInBUSD,
       positionTokenPriceAndVolume.priceInBNB
+    )
+
+    let realizedPnl = calculateRealizedPnl(posiIn, volumeInBUSD)
+    updateUserRealizedPnlDayData(
+      sender,
+      realizedPnl,
+      volumeInBUSD,
+      event
     )
   }
 
@@ -70,10 +86,22 @@ export function handleSwap(event: Swap): void {
       positionTokenPriceAndVolume.priceInBUSD,
       positionTokenPriceAndVolume.priceInBNB
     )
+
+    let realizedPnl = calculateRealizedPnl(posiIn, volumeInBUSD)
+    updateUserRealizedPnlDayData(
+      sender,
+      realizedPnl,
+      volumeInBUSD,
+      event
+    )
   }
 }
 
-function increaseTokenBuyOrSellOfSender(sender: User, posiIn: BigInt, posiOut: BigInt): void {
+function increaseTokenBuyOrSellOfSender(
+  sender: User,
+  posiIn: BigInt,
+  posiOut: BigInt
+): void {
   // If posiIn > 0 -> Sell
   if (posiIn.gt(ZERO_BI)) { 
     sender.totalTokensSell = sender.totalTokensSell.plus(posiIn)

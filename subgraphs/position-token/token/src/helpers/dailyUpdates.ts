@@ -1,7 +1,7 @@
 import { BigDecimal, ethereum } from '@graphprotocol/graph-ts'
 import { User } from '../../generated/schema'
 import { ONE_BI } from '../utils/constant'
-import { getOrInitPositionTokenDayData } from './initializers'
+import { getOrInitPositionTokenDayData, getOrInitUserRealizedPnlDayData } from './initializers'
 
 export function updatePositionTokenDayData(
   from: User,
@@ -10,9 +10,6 @@ export function updatePositionTokenDayData(
   event: ethereum.Event
 ): void {
   let positionTokenDayData = getOrInitPositionTokenDayData(event)
-  if (from.updatedTimestamp.toI32() < positionTokenDayData.date) {
-    positionTokenDayData.dailyActiveAddresses = positionTokenDayData.dailyActiveAddresses.plus(ONE_BI)
-  }
   if (to.createdBlockNumber.equals(event.block.number)) {
     positionTokenDayData.dailyNewUniqueAddresses = positionTokenDayData.dailyNewUniqueAddresses.plus(ONE_BI)
   }
@@ -38,4 +35,22 @@ export function updatePositionTokenDayDataPriceAndVolume(
     positionTokenDayData.dailyVolumeInBUSD = positionTokenDayData.dailyVolumeInBUSD.plus(volumeInBUSD)
   }
   positionTokenDayData.save()
+}
+
+export function updateUserRealizedPnlDayData(
+  user: User,
+  realizedPnl: BigDecimal,
+  volumeInBUSD: BigDecimal,
+  event: ethereum.Event
+): void {
+  let userRealizedPnlDayData = getOrInitUserRealizedPnlDayData(
+    user,
+    event
+  )
+
+  userRealizedPnlDayData.realizedPnl = userRealizedPnlDayData.realizedPnl.plus(realizedPnl)
+  userRealizedPnlDayData.volumeInBUSD = userRealizedPnlDayData.volumeInBUSD.plus(volumeInBUSD)
+  userRealizedPnlDayData.transactions = userRealizedPnlDayData.transactions.plus(ONE_BI)
+
+  userRealizedPnlDayData.save()
 }

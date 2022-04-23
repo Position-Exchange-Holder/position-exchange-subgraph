@@ -1,9 +1,25 @@
 import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
-import { BotKeeperChanged, Donate, Transfer, TreasuryContractChanged } from '../../generated/PositionToken/PositionToken'
+import {
+  BotKeeperChanged,
+  Donate,
+  Transfer,
+  TreasuryContractChanged
+} from '../../generated/PositionToken/PositionToken'
 import { updatePositionTokenDayData } from '../helpers/dailyUpdates'
-// import { getPosiPriceInBNB, getPosiPriceInBUSD } from '../helpers/getPrices'
-import { getOrInitBotKeeper, getOrInitPositionToken, getOrInitPositionTokenPriceAndVolume, getOrInitTreasury, getOrInitUser, initDonate, initTransaction } from '../helpers/initializers'
-import { ACTION_BURN, ACTION_MINT, ONE_BI, TOKEN_TRANSFER_TAX_RATE } from '../utils/constant'
+import {
+  getOrInitBotKeeper,
+  getOrInitPositionToken,
+  getOrInitTreasury,
+  getOrInitUser,
+  initDonate,
+  initTransaction
+} from '../helpers/initializers'
+import {
+  ACTION_BURN,
+  ACTION_MINT,
+  ONE_BI,
+  TOKEN_TRANSFER_TAX_RATE
+} from '../utils/constant'
 import { getTransferAction } from '../utils/getData'
 
 export function handleTransfer(event: Transfer): void {
@@ -107,11 +123,3 @@ export function handleTreasuryContractChanged(event: TreasuryContractChanged): v
   treasury.updatedTimestamp = event.block.timestamp
   treasury.save()
 }
-
-// export function handleBlock(block: ethereum.Block): void {
-//   let positionTokenPrice = getOrInitPositionTokenPriceAndVolume(block.number)
-//   positionTokenPrice.priceInBUSD = getPosiPriceInBUSD()
-//   positionTokenPrice.priceInBNB = getPosiPriceInBNB()
-//   positionTokenPrice.updatedBlockNumber = block.number
-//   positionTokenPrice.save()
-// }
