@@ -25,7 +25,7 @@ export function handleSwap(event: Swap): void {
     let volumeInBUSD = busdIn.plus(busdOut).toBigDecimal()
     let realizedPnl = calculateRealizedPnl(posiIn, volumeInBUSD)
     
-    let sender = getOrInitUser(event.transaction.from.toHex(), event)
+    let sender = getOrInitUser(event.params.sender.toHex(), event)
     increaseTokenBuyOrSellOfSender(sender, posiIn, posiOut)
     sender.totalVolumeInBUSD = sender.totalVolumeInBUSD.plus(volumeInBUSD)
     sender.realizedPnl = sender.realizedPnl.plus(realizedPnl)
