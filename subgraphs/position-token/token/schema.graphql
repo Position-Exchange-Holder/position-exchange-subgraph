@@ -4,6 +4,11 @@ enum Action {
   Transfer
 }
 
+enum SwapAction {
+  Buy
+  Sell
+}
+
 type PositionToken @entity {
   """
   id: 1
@@ -28,6 +33,14 @@ type PositionToken @entity {
   totalHolders: BigInt!
   totalRFIRedistributed: BigDecimal!
 
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+  updatedTimestamp: BigInt!
+}
+
+type ApprovalContract @entity {
+  id: ID!
+  totalApprovals: BigInt!
   createdBlockNumber: BigInt!
   createdTimestamp: BigInt!
   updatedTimestamp: BigInt!
@@ -88,6 +101,7 @@ type User @entity {
   totalTransactions: BigInt!
   fromTransactions: [Transaction!]! @derivedFrom(field: "from")
   toTransactions: [Transaction!]! @derivedFrom(field: "to")
+  swapTransactions: [SwapTransaction!]! @derivedFrom(field: "from")
 
   createdBlockNumber: BigInt!
   createdTimestamp: BigInt!
@@ -118,6 +132,24 @@ type Transaction @entity {
   
   from: User!
   to: User!
+
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+
+  createdBlockNumber: BigInt!
+  createdTimestamp: BigInt!
+}
+
+type SwapTransaction @entity {
+  id: ID!
+
+  amountPosi: BigInt!
+  amountQuote: BigInt!
+  amountBusd: BigDecimal!
+  action: SwapAction!
+  market: String!
+  
+  from: User!
 
   gasLimit: BigInt!
   gasPrice: BigInt!

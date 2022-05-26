@@ -25,6 +25,7 @@ dataSources:
         - DonateRecord
         - BotKeeper
         - Treasury
+        - ApprovalContract
       abis:
         - name: PositionToken
           file: ./abis/PositionToken.json
@@ -33,6 +34,8 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
         - event: Donate(indexed address,indexed uint256)
           handler: handleDonate
         - event: BotKeeperChanged(indexed address,indexed address)
@@ -56,6 +59,7 @@ templates:
         - PositionTokenDayData
         - User
         - UserRealizedPnlDayData
+        - SwapTransaction
       abis:
         - name: Pair
           file: ./abis/Pair.json

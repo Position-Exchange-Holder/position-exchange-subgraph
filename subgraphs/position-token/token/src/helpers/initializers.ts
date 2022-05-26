@@ -20,7 +20,9 @@ import {
   Transaction,
   PositionTokenDayData,
   PositionTokenPriceAndVolume,
-  Market
+  Market,
+  SwapTransaction,
+  ApprovalContract
 } from '../../generated/schema'
 import { Pair as PairTemplate } from '../../generated/templates'
 import { BD_ZERO, DEFAULT_ID, TOKEN_MAX_SUPPLY, ZERO_BI } from '../utils/constant'
@@ -209,6 +211,29 @@ export function initTransaction(
   transaction.save()
 }
 
+export function initSwapTransaction(
+  sender: User,
+  amountPosi: BigInt,
+  amountQuote: BigInt,
+  amountBusd: BigDecimal,
+  action: string,
+  market: string,
+  event: ethereum.Event
+): void {
+  let transaction = new SwapTransaction('swap:' + event.transaction.hash.toHexString())
+  transaction.amountPosi = amountPosi
+  transaction.amountQuote = amountQuote
+  transaction.amountBusd = amountBusd
+  transaction.action = action
+  transaction.market = market
+  transaction.from = sender.id
+  transaction.gasLimit = event.transaction.gasLimit
+  transaction.gasPrice = event.transaction.gasPrice
+  transaction.createdBlockNumber = event.block.number
+  transaction.createdTimestamp = event.block.timestamp
+  transaction.save()
+}
+
 export function initDonate(event: Donate): void {
   let donateRecord = new DonateRecord(event.transaction.hash.toHexString())
   donateRecord.donor = event.params.sender
@@ -256,4 +281,22 @@ export function getOrInitTreasury(
   }
 
   return treasury
+}
+
+export function getOrInitApprovalContract(
+  address: string,
+  event: ethereum.Event
+): ApprovalContract {
+  let contract = ApprovalContract.load(address)
+
+  if (!contract) {
+    contract = new ApprovalContract(address)
+    contract.totalApprovals = ZERO_BI
+    contract.createdBlockNumber = event.block.number
+    contract.createdTimestamp = event.block.timestamp
+    contract.updatedTimestamp = event.block.timestamp
+    contract.save()
+  }
+
+  return contract
 }

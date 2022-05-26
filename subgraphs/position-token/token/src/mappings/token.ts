@@ -1,5 +1,6 @@
 import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 import {
+  Approval,
   BotKeeperChanged,
   Donate,
   Transfer,
@@ -7,6 +8,7 @@ import {
 } from '../../generated/PositionToken/PositionToken'
 import { updatePositionTokenDayData } from '../helpers/dailyUpdates'
 import {
+  getOrInitApprovalContract,
   getOrInitBotKeeper,
   getOrInitPositionToken,
   getOrInitTreasury,
@@ -18,7 +20,8 @@ import {
   ACTION_BURN,
   ACTION_MINT,
   ONE_BI,
-  TOKEN_TRANSFER_TAX_RATE
+  TOKEN_TRANSFER_TAX_RATE,
+  ZERO_BI
 } from '../utils/constant'
 import { getTransferAction } from '../utils/getData'
 
@@ -78,6 +81,14 @@ export function handleTransfer(event: Transfer): void {
   positionToken.save()
   from.save()
   to.save()
+}
+
+export function handleApproval(event: Approval): void {
+  const contract = getOrInitApprovalContract(event.params.spender.toHex(), event)
+  if (event.params.value.gt(ZERO_BI)) {
+    contract.totalApprovals = contract.totalApprovals.plus(ONE_BI)
+    contract.save()
+  }
 }
 
 export function handleDonate(event: Donate): void {

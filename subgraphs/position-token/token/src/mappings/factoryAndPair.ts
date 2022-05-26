@@ -1,13 +1,14 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 import { Swap } from '../../generated/templates/Pair/Pair'
 import { User } from '../../generated/schema'
 import {
   getOrInitMarket,
   getOrInitPositionTokenPriceAndVolume,
-  getOrInitUser
+  getOrInitUser,
+  initSwapTransaction
 } from '../helpers/initializers'
 import { LP_PAIRS } from '../utils/addresses'
-import { ONE_BI, ZERO_BI } from '../utils/constant'
+import { BD_ZERO, ONE_BI, ZERO_BI } from '../utils/constant'
 import {
   updatePositionTokenDayDataPriceAndVolume,
   updateUserRealizedPnlDayData
@@ -55,6 +56,17 @@ export function handleSwap(event: Swap): void {
       volumeInBUSD,
       event
     )
+
+    const swapAction = getSwapAction(posiIn)
+    initSwapTransaction(
+      sender,
+      getAmountToken(posiIn, posiOut),
+      getAmountToken(busdIn, busdOut),
+      getAmountBusd(volumeInBUSD, swapAction),
+      swapAction,
+      'BUSD',
+      event
+    )
   }
 
   // Trade POSI/WBNB
@@ -96,6 +108,17 @@ export function handleSwap(event: Swap): void {
       volumeInBUSD,
       event
     )
+
+    const swapAction = getSwapAction(posiIn)
+    initSwapTransaction(
+      sender,
+      getAmountToken(posiIn, posiOut),
+      getAmountToken(bnbIn, bnbOut),
+      getAmountBusd(volumeInBUSD, swapAction),
+      swapAction,
+      'BNB',
+      event
+    )
   }
 }
 
@@ -111,4 +134,20 @@ function increaseTokenBuyOrSellOfSender(
   } else { 
     sender.totalTokensBuy = sender.totalTokensBuy.plus(posiOut)
   }
+}
+
+function getSwapAction(posiIn: BigInt): string {
+  return posiIn.gt(ZERO_BI) ? 'Sell' : 'Buy'
+}
+
+function getAmountToken(tokenIn: BigInt, tokenOut: BigInt): BigInt {
+  return tokenIn.equals(ZERO_BI)
+    ? tokenOut
+    : tokenIn
+}
+
+function getAmountBusd(amountBusd: BigDecimal, action: string): BigDecimal {
+  return action == 'Buy' // Buy Posi
+    ? BD_ZERO.minus(amountBusd)
+    : amountBusd
 }
