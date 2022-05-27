@@ -181,6 +181,7 @@ export function getOrInitUser(
     user.totalVolumeInBUSD = BD_ZERO
     
     user.totalTransactions = ZERO_BI
+    user.totalSwapTransactions = ZERO_BI
     
     user.createdBlockNumber = event.block.number
     user.createdTimestamp = event.block.timestamp

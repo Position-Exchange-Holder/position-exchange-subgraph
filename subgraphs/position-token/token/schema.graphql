@@ -99,6 +99,8 @@ type User @entity {
   totalVolumeInBUSD: BigDecimal!
 
   totalTransactions: BigInt!
+  totalSwapTransactions: BigInt!
+  
   fromTransactions: [Transaction!]! @derivedFrom(field: "from")
   toTransactions: [Transaction!]! @derivedFrom(field: "to")
   swapTransactions: [SwapTransaction!]! @derivedFrom(field: "from")
