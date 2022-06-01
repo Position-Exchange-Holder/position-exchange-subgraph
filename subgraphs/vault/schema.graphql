@@ -47,6 +47,7 @@ interface TransactionInterface {
 
 type CompoundTransaction implements TransactionInterface @entity {
   id: ID!
+  type: String!
   reward: BigInt!
   sender: Compounder!
   gasLimit: BigInt!

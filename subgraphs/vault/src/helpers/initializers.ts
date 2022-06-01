@@ -1,4 +1,4 @@
-import { ethereum, BigInt } from '@graphprotocol/graph-ts'
+import { ethereum, BigInt, dataSource, Address } from '@graphprotocol/graph-ts'
 import { Compounder, PositionVault, CompoundTransaction, HarvestTransaction, User } from '../../generated/schema'
 import { ZERO_BI } from '../utils/constant'
 
@@ -54,6 +54,15 @@ export function initCompoundTransaction(
   event: ethereum.Event
 ): void {
   let transaction = new CompoundTransaction(event.transaction.hash.toHexString())
+  const source = dataSource.address()
+  if (source == Address.fromString('0xf35848441017917a034589bfbec4b3783bb39cb2')) {
+    transaction.type = 'BUSD'
+  } else if (source == Address.fromString('0xC1742A30b7469f49f37239B1c2905876821700e8')) {
+    transaction.type = 'BNB'
+  } else {
+    transaction.type = ''
+  }
+
   transaction.sender = sender.id
   transaction.reward = reward
   transaction.gasLimit = event.transaction.gasLimit
