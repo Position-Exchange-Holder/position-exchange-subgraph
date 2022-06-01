@@ -1,8 +1,10 @@
 {
   "network": "bsc",
-  "description": "Position Exchange BNB Vault",
+  "description": "Position Exchange Vaults",
   "repository": "https://github.com/Position-Exchange-Holder/position-exchange-subgraph",
   "apiVersion": "0.0.5",
   "PositionBnbVaultAddress": "0xC1742A30b7469f49f37239B1c2905876821700e8",
-  "PositionBnbVaultStartBlock": 11734297
+  "PositionBnbVaultStartBlock": 11734297,
+  "PositionBusdVaultAddress": "0xf35848441017917a034589bfbec4b3783bb39cb2",
+  "PositionBusdVaultStartBlock": 11652873
 }

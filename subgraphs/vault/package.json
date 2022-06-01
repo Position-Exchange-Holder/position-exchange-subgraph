@@ -1,6 +1,6 @@
 {
-  "name": "position-busd-vault-subgraph",
-  "description": "Position BUSD Vault Subgraph",
+  "name": "position-vaults-subgraph",
+  "description": "Position Vaults Subgraph",
   "author": "Community",
   "keywords": ["position", "exchange", "subgraph"],
   "version": "1.0.0",

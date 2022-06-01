@@ -14,13 +14,8 @@
 - WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-referral
 
 ### [Vault](./subgraphs/vault/)
-BUSD
-- HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-busd-vault
-- WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-busd-vault
-
-BNB
-- HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-bnb-vault
-- WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-bnb-vault
+- HTTP: https://api.thegraph.com/subgraphs/name/gafranslotteria/position-vaults
+- WSS: wss://api.thegraph.com/subgraphs/name/gafranslotteria/position-vaults
 
 ### [Bond](./subgraphs/bond/)
 Bond01
