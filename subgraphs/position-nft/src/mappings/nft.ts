@@ -2,7 +2,7 @@ import { log } from '@graphprotocol/graph-ts'
 import { ApprovalForAll, Transfer } from '../../generated/PositionNFT/PositionNFT'
 import { getOrInitNft, getOrInitContract, getOrInitNftDayData, getOrInitNftStatistics, getOrInitOwner, initTransaction } from '../helpers/initializers'
 import { ONE_BI } from '../utils/constant'
-import { getContractName, getGradeOfNft, getNftTransferAction } from '../utils/getData'
+import { getContractName, getGradeOfNft, getNftStatus, getNftTransferAction } from '../utils/getData'
 
 export function handleTransfer(event: Transfer): void {
   let nft = getOrInitNft(event.params.tokenId.toString(), event)
@@ -41,13 +41,25 @@ export function handleTransfer(event: Transfer): void {
   }
 
   // Normal transfer
-  from.totalNfts = action == 'Mint' ? from.totalNfts : from.totalNfts.minus(ONE_BI)
+  from.totalNfts =
+    action == 'Mint'
+    || action == 'Stake'
+    || action == 'Unstake'
+      ? from.totalNfts
+      : from.totalNfts.minus(ONE_BI)
   from.totalTransactions = from.totalTransactions.plus(ONE_BI)
-  to.totalNfts = to.totalNfts.plus(ONE_BI)
+  to.totalNfts =
+    action == 'Stake'
+    || action == 'Unstake'
+      ? to.totalNfts
+      : to.totalNfts.plus(ONE_BI)
   to.totalTransactions = to.totalTransactions.plus(ONE_BI)
 
   // Update current owner
-  nft.owner = to.id
+  if (action != 'Stake') {
+    nft.owner = to.id
+  }
+  nft.status = getNftStatus(from.id, to.id)
   nft.totalTransactions = nft.totalTransactions.plus(ONE_BI)
   nft.updatedTimestamp = event.block.timestamp
 

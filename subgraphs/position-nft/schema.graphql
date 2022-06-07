@@ -7,6 +7,12 @@ enum Action {
   Unstake
 }
 
+enum NftStatus {
+  Holding
+  Staking
+  Trading
+}
+
 type PositionNFT @entity {
   id: ID!
 
@@ -25,6 +31,8 @@ type PositionNFT @entity {
   createdTime: BigInt!
   blockNum: BigInt!
   lockedDays: BigInt!
+
+  status: NftStatus!
 
   owner: Owner!
   transactions: [Transaction!]! @derivedFrom(field: "nft")

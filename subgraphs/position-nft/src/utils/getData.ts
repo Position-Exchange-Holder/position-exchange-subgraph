@@ -32,6 +32,20 @@ export function getNftTransferAction(from: string, to: string): string {
   return 'Transfer'
 }
 
+export function getNftStatus(from: string, to: string): string {
+  from = from.toString().toLowerCase()
+  to = to.toString().toLowerCase()
+
+  if (to == NFT_REWARD_POOL_ADDRESS || to == NFT_REWARD_POOL_V2_ADDRESS) {
+    return 'Staking'
+  }
+  if (to == NFT_MARKETPLACE_PROXY_ADDRESS) {
+    return 'Trading'
+  }
+
+  return 'Holding'
+}
+
 export function getContractName(contractAddress: string): string {
   if (contractAddress.toLowerCase() == NFT_FACTORY_ADDRESS) {
     return 'PositionFactory'
